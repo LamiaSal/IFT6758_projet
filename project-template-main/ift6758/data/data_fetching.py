@@ -8,6 +8,10 @@ def get_season(year: int, out_dir:str):
     if not os.path.exists(out_dir):
         os.mkdir(out_dir)
 
+    out_dir = os.path.join(out_dir,str(year))
+    if not os.path.exists(out_dir):
+        os.mkdir(out_dir)
+
     dir_regular_season = os.path.join(out_dir,'regular_season')
     if not os.path.exists(dir_regular_season):
         os.mkdir(dir_regular_season)
@@ -68,4 +72,5 @@ def get_playoffs(year:int, out_dir:str):
 
 
 if __name__ == '__main__':
-    get_season(2017,os.path.join('datasets','raw'))
+    for year in range(2016,2021):
+        get_season(year,os.path.join('datasets','raw'))
