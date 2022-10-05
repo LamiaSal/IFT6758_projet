@@ -4,7 +4,7 @@ import json
 
 class NHL_Season_Data_Fetcher:
 
-    def __init__(self,seasons,out_dir):
+    def __init__(self,seasons:list,out_dir:str) -> None:
         '''
         Initialise the Object
         self.seasons -> list of int ex:[2017,2018,2019]
@@ -12,6 +12,7 @@ class NHL_Season_Data_Fetcher:
         '''
         self.seasons = seasons
         self.base_dir = out_dir
+        create_dir(self.base_dir)
 
     def get_seasons(self) -> dict:
         '''
@@ -23,6 +24,22 @@ class NHL_Season_Data_Fetcher:
             d[year] = self.get_season(year)
         return d
 
+    def create_season_directories(self, year:int) -> str:
+        '''
+            Creates Season's directories
+        '''
+        
+        season_out_dir = os.path.join(self.base_dir,str(year))
+        create_dir(season_out_dir)
+        
+        dir_regular_season = os.path.join(season_out_dir,'regular_season')
+        create_dir(dir_regular_season)
+
+        dir_playoffs = os.path.join(season_out_dir,'playoffs')
+        create_dir(dir_playoffs)
+
+        return dir_regular_season, dir_playoffs
+
     def get_season(self,year:int)->dict:
         '''
         Function that retrieves all data for a season.
@@ -31,26 +48,11 @@ class NHL_Season_Data_Fetcher:
 
         assert(len(str(year))==4)
 
-        if not os.path.exists(self.base_dir):
-            os.mkdir(self.base_dir)
+        dir_regular_season, dir_playoffs = self.create_season_directories(year)
 
-        season_out_dir = os.path.join(self.base_dir,str(year))
-        if not os.path.exists(season_out_dir):
-            os.mkdir(season_out_dir)
-
-        dir_regular_season = os.path.join(season_out_dir,'regular_season')
-        if not os.path.exists(dir_regular_season):
-            os.mkdir(dir_regular_season)
-
+        #Fecth Data
         d = dict()
-
         d['regular season'] = self.get_regular_season(year,dir_regular_season)
-
-        dir_playoffs = os.path.join(season_out_dir,'playoffs')
-
-        if not os.path.exists(dir_playoffs):
-            os.mkdir(dir_playoffs)
-
         d['playoffs'] = self.get_playoffs(year,dir_playoffs)
 
         return d
@@ -63,10 +65,10 @@ class NHL_Season_Data_Fetcher:
         Function that retrieves all data for each regular season game of a season.
         It returns a dictionary whose keys correspond to the Game ID of each game.
         '''
+
         number_of_games = 1230
         if year >= 2017:
-            number_of_games = 1271
-            
+            number_of_games = 1271    
         if year == 2020:
             number_of_games = 868 # less matchs due to Covid
 
@@ -119,7 +121,13 @@ class NHL_Season_Data_Fetcher:
         return response.json
 
 
-        
+def create_dir(dir_path:str):
+    '''
+    create a directory if it doesn't exist
+    '''
+    if not os.path.exists(dir_path):
+        os.mkdir(dir_path)
+
 
 
 
