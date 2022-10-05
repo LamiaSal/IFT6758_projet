@@ -31,13 +31,13 @@ class NHL_Season_Data_Fetcher:
         Creates the season's directories
         '''
         
-        season_out_dir = os.path.join(self.base_dir,str(year))
-        create_dir(season_out_dir)
+        dir_year = os.path.join(self.base_dir,str(year))
+        create_dir(dir_year)
         
-        dir_regular_season = os.path.join(season_out_dir,'regular_season')
+        dir_regular_season = os.path.join(dir_year,'regular_season')
         create_dir(dir_regular_season)
 
-        dir_playoffs = os.path.join(season_out_dir,'playoffs')
+        dir_playoffs = os.path.join(dir_year,'playoffs')
         create_dir(dir_playoffs)
 
         return dir_regular_season, dir_playoffs
