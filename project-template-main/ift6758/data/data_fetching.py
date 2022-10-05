@@ -6,8 +6,8 @@ class NHL_Season_Data_Fetcher:
 
     def __init__(self,seasons:list,out_dir:str) -> None:
         '''
-        Initialise the Object
-        self.seasons -> list of int ex:[2017,2018,2019]
+        Initialize the object and create the base directory.
+        self.seasons -> list of int for the years ex:[2017,2018,2019]
         self.base_dir -> the directory where the jsons are or will be saved.
         '''
         self.seasons = seasons
@@ -18,6 +18,8 @@ class NHL_Season_Data_Fetcher:
         '''
         Function that retrieves all data for all seasons and returns a dictionary.
         It returns a dictionary with a key for each year.
+        Key structure:
+            Year -> ['regular season','playoffs'] -> GAME ID -> JSON of the game
         '''
         d = dict()
         for year in self.seasons:
