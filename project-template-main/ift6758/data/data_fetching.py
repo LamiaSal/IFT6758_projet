@@ -28,7 +28,7 @@ class NHL_Season_Data_Fetcher:
 
     def create_season_directories(self, year:int) -> str:
         '''
-            Creates Season's directories
+        Creates the season's directories
         '''
         
         season_out_dir = os.path.join(self.base_dir,str(year))
@@ -72,7 +72,7 @@ class NHL_Season_Data_Fetcher:
         if year >= 2017:
             number_of_games = 1271    
         if year == 2020:
-            number_of_games = 868 # less matchs due to Covid
+            number_of_games = 868 # less games due to Covid
 
         d = dict()
         for game_number in range( 1 , number_of_games + 1 ):
