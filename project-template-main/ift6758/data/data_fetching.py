@@ -123,7 +123,7 @@ class NHL_Season_Data_Fetcher:
         return response.json
 
 
-def create_dir(base_dir:str, sub_dir:str):
+def create_dir(base_dir:str) -> None:
     '''
     create a directory if it doesn't exist
     '''
