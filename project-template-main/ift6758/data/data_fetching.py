@@ -92,18 +92,18 @@ class NHL_Season_Data_Fetcher:
 
         for round in range(1,5): # There are 4 rounds 
 
-            for matchup in range(nb_of_matchups_per_round[round-1]): # Iterate through each matchup
+            for matchup in range(1,nb_of_matchups_per_round[round-1] +1): # Iterate through each matchup
 
                 for match in range(1,8): # There are 7 games per matchup
 
-                    game_id = f'{year}020{round}{matchup}{match}'
+                    game_id = f'{year}030{round}{matchup}{match}'
                     d[game_id] = self.get_game(game_id, out_dir)
 
         return d
 
     def get_game(self,game_id: int,out_dir:str) -> json:
         '''
-        Function that retrieves the json file associated to a particular Game ID on
+        Function that retrieves the json file associated to a particular Game ID at
         https://statsapi.web.nhl.com/api/v1/game/[GAME_ID]/feed/live/
         It returns a json object.
         '''
