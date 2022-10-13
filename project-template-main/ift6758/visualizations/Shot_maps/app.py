@@ -18,15 +18,17 @@ from dash.dependencies import Input, Output
 import pandas as pd
 
 import preprocess
-import plot_1
 import template
 
-
 import plotly.graph_objects as go 
+from plot import advance_plot
 
 app = dash.Dash(__name__)
 app.title = 'Test Visualization question 6'
 
+season=20162017
+plot_1 = advance_plot(f"../../../datasets/data_to_plot_per_{str(season)}-bis.csv","../../../figures/nhl_rink.png",season=season,sigma=3)
+fig = plot_1.get_figure()
 
 
 app.layout = html.Div(className='content', children=[
@@ -38,7 +40,7 @@ app.layout = html.Div(className='content', children=[
         dcc.Graph(
             id='shotmap',
             className='graph',
-            figure=plot_1.get_figure(),
+            figure=fig,
             config=dict(
                 scrollZoom=False,
                 showTips=False,
@@ -50,5 +52,4 @@ app.layout = html.Div(className='content', children=[
     ])
 ])
 
-
-app.run_server(debug=True, use_reloader=False)  # Turn off reloader if inside Jupyter
+#app.run_server(debug=True, use_reloader=True)  # Turn off reloader if inside Jupyter
