@@ -137,7 +137,7 @@ class advance_plot():
                 name = team_name,
                 visible = visible,
                 colorbar=dict(
-                    title="Excess shots<br>per hour<br>(in %)", # title here
+                    title="Excess shots<br>per hour<br>(in ratio)", # title here
                     titleside='right',
                     titlefont=dict(
                         size=14,

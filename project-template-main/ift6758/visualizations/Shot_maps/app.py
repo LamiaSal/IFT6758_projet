@@ -27,30 +27,30 @@ from plot import advance_plot
 app = dash.Dash(__name__)
 app.title = 'Test Visualization question 6'
 
-season=20162017
-plot_1 = advance_plot(f"../../../datasets/data_to_plot_per_{str(season)}-bis.csv","../../../figures/nhl_rink.png",season=season,sigma=3)
-fig = plot_1.get_figure()
-
+seasons=[20162017,20172018, 20182019, 20192020,20202021]
+children_main=[]
+for season in seasons : 
+    plot = advance_plot(f"../../../datasets/data_to_plot_per_{str(season)}.csv","../../../figures/nhl_rink.png",season=season,sigma=2)
+    fig = plot.get_figure()
+    children_main.append( dcc.Graph(
+                id=f'shotmap_{season}',
+                className='graph',
+                figure=fig,
+                config=dict(
+                    scrollZoom=False,
+                    showTips=False,
+                    showAxisDragHandles=False,
+                    doubleClick=False,
+                    displayModeBar=False
+                ),
+            ))
 
 app.layout = html.Div(className='content', children=[
     html.Header(children=[
         html.H1('Shot maps of hockey match'),
         html.H2('From 2016/2017 to 2020/2021 seasons')
     ]),
-    html.Main(className='viz-container', children=[
-        dcc.Graph(
-            id='shotmap',
-            className='graph',
-            figure=fig,
-            config=dict(
-                scrollZoom=False,
-                showTips=False,
-                showAxisDragHandles=False,
-                doubleClick=False,
-                displayModeBar=False
-            )
-        ),
-    ])
+    html.Main(className='viz-container', children=children_main)
 ])
 
 #app.run_server(debug=True, use_reloader=True)  # Turn off reloader if inside Jupyter
