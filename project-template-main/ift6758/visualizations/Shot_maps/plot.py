@@ -7,6 +7,10 @@ import plotly.graph_objects as go
 from PIL import Image
 from scipy.ndimage import gaussian_filter
 import numpy as np
+import matplotlib
+import matplotlib.pyplot as plt
+from mpl_toolkits.axes_grid1 import AxesGrid
+
 class advance_plot():
     def __init__(self,csv_path:str,img_path,season,sigma=3):
         self.df = pd.read_csv(csv_path)
@@ -69,15 +73,20 @@ class advance_plot():
                 font={'size':18}, 
                 x= 0.5,
             ),
-
-            width=900,
-            height=470,
            
             template="plotly_white"
         )
 
-        fig.data[0].colorbar.title = {"text":"Excess shots<br>per hour<br>(in %)"}
 
+        #fig.data[0].colorbar.title = {"text":"Excess shots<br>per hour<br>(in %)"}
+        fig.update_xaxes(
+            constrain="domain",
+        )
+        fig.update_yaxes(
+                    scaleanchor="x",
+                    scaleratio = 0.85
+                    )
+        
 
         return fig
 
@@ -86,25 +95,39 @@ class advance_plot():
         team_data = self.df[['x_coord','y_coord',team_name]]
         
         
-        z = np.ones((200,100))
+        z = np.ones((201,101))
         for index,row in team_data.iterrows():
             z[int(row['x_coord'])+100,int(row['y_coord'])+50] = int(row[team_name])
 
         z_smooth = gaussian_filter(z.T,self.sigma)       
 
-        x = np.array(range(-100,100))
-        y = np.array(range(-50,50))
+        x = np.array(range(-100,101))
+        y = np.array(range(-50,51))
 
         z_smooth = np.around(z_smooth,1)
 
         #print("yo",z_smooth)
 
         m = max(np.max(z_smooth), np.abs(np.min(z_smooth)))
+        
+        colorscale =['rgb(103,0,31)', #0
+        'rgb(178,24,43)', #0.2
+        'rgb(214,96,77)', #0.4
+        'rgb(244,165,130)',#0.6
+        'rgb(253,219,199)', # 0.8
+        'rgb(250,250,250)', #0.8
+        'rgb(250,250,250)',#1.0
+        #'rgb(209,229,240)', # 1.2
+        'rgb(146,197,222)', #1.4
+        'rgb(67,147,195)', #1.6
+        'rgb(33,102,172)', #1.8
+        'rgb(5,48,97)']#2
+        
         contour =  go.Contour(
                 x = x,
                 y = y,
                 z= z_smooth,
-                colorscale=px.colors.diverging.RdBu,#'RdBu',
+                colorscale=colorscale, #px.colors.sequential.RdBu_r,#'RdBu',
                 zmin=0,
                 zmax=2,
                 zmid=1,
@@ -113,7 +136,13 @@ class advance_plot():
                 connectgaps= False,
                 name = team_name,
                 visible = visible,
+                colorbar=dict(
+                    title="Excess shots<br>per hour<br>(in %)", # title here
+                    titleside='right',
+                    titlefont=dict(
+                        size=14,
+                        family='Arial, sans-serif')
+                )
             )
         
         return contour
-       
