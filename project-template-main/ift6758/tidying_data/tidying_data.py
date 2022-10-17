@@ -130,7 +130,7 @@ def get_file_event_rows_data(data,type_season):
             
             # strength
             try :
-                strength = item['result']['name']
+                strength = item['result']['strength']['name']
             except :
                 strength = None
             
