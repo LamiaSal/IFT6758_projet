@@ -7,10 +7,10 @@ import plotly.graph_objects as go
 from PIL import Image
 from scipy.ndimage import gaussian_filter
 import numpy as np
-import matplotlib
-import matplotlib.pyplot as plt
 from mpl_toolkits.axes_grid1 import AxesGrid
 
+# Need to run export_data_to_plot() for every season in preprocess.py first 
+# to get the csv files...
 class advance_plot():
     def __init__(self,csv_path:str,img_path,season,sigma=3):
         self.df = pd.read_csv(csv_path)
@@ -77,8 +77,6 @@ class advance_plot():
             template="plotly_white"
         )
 
-
-        #fig.data[0].colorbar.title = {"text":"Excess shots<br>per hour<br>(in %)"}
         fig.update_xaxes(
             constrain="domain",
         )
