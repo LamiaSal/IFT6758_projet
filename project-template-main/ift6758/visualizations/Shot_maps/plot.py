@@ -13,7 +13,7 @@ from mpl_toolkits.axes_grid1 import AxesGrid
 # to get the csv files...
 class advance_plot():
     def __init__(self,csv_path:str,img_path,season,sigma=3):
-        self.df = pd.read_csv(csv_path)
+        self.df = pd.read_pickle(csv_path)
         self.sigma = sigma
         self.img_path = img_path
         self.season = season
@@ -28,22 +28,22 @@ class advance_plot():
                 xref="x",
                 yref="y",
                 x=-100,
-                y=50,
+                y=42.5,
                 sizex=200,
-                sizey=100,
+                sizey=85,
                 sizing="stretch",
                 opacity=0.3,
                 layer="above",
             )
         )
 
-        team_names = self.df.columns[2:]
+        team_names = self.df.keys()
         for i, team in enumerate(team_names):
 
             if i == 0:
-                contour = self.get_contour(team, visible=True)
+                contour = self.get_contour_2(team, visible=True)
             else:
-                contour = self.get_contour(team)
+                contour = self.get_contour_2(team)
 
             fig.add_trace(contour)
 
@@ -87,24 +87,22 @@ class advance_plot():
         
 
         return fig
+    def get_contour_2(self,team_name:str,visible:bool = False):
+        
 
-    def get_contour(self,team_name:str,visible:bool = False):
-    
-        team_data = self.df[['x_coord','y_coord',team_name]]
+        team_data = self.df[team_name]
+        z =np.zeros((201,86))
+        for i in range(len(team_data)):
+            z[i,:-1]=team_data[i]
         
-        
-        z = np.ones((201,101))
-        for index,row in team_data.iterrows():
-            z[int(row['x_coord'])+100,int(row['y_coord'])+50] = int(row[team_name])
 
         z_smooth = gaussian_filter(z.T,self.sigma)       
 
         x = np.array(range(-100,101))
-        y = np.array(range(-50,51))
+        y = np.array(range(-43,44))
 
-        z_smooth = np.around(z_smooth,1)
+        z_smooth = np.around(z_smooth,3)
 
-        #print("yo",z_smooth)
 
         m = max(np.max(z_smooth), np.abs(np.min(z_smooth)))
         
@@ -126,9 +124,9 @@ class advance_plot():
                 y = y,
                 z= z_smooth,
                 colorscale=colorscale, #px.colors.sequential.RdBu_r,#'RdBu',
-                zmin=0,
-                zmax=2,
-                zmid=1,
+                zmin=-m,
+                zmax=m,
+                zmid=0,
                 line_smoothing=1,
                 reversescale=True,
                 connectgaps= False,
@@ -144,3 +142,60 @@ class advance_plot():
             )
         
         return contour
+
+    # def get_contour(self,team_name:str,visible:bool = False):
+    
+    #     team_data = self.df[['x_coord','y_coord',team_name]]
+        
+        
+    #     z = np.ones((201,101))
+    #     for index,row in team_data.iterrows():
+    #         z[int(row['x_coord'])+100,int(row['y_coord'])+50] = int(row[team_name])
+
+    #     z_smooth = gaussian_filter(z.T,self.sigma)       
+
+    #     x = np.array(range(-100,101))
+    #     y = np.array(range(-50,51))
+
+    #     z_smooth = np.around(z_smooth,1)
+
+    #     #print("yo",z_smooth)
+
+    #     m = max(np.max(z_smooth), np.abs(np.min(z_smooth)))
+        
+    #     colorscale =['rgb(103,0,31)', #0
+    #     'rgb(178,24,43)', #0.2
+    #     'rgb(214,96,77)', #0.4
+    #     'rgb(244,165,130)',#0.6
+    #     'rgb(253,219,199)', # 0.8
+    #     'rgb(250,250,250)', #0.8
+    #     'rgb(250,250,250)',#1.0
+    #     #'rgb(209,229,240)', # 1.2
+    #     'rgb(146,197,222)', #1.4
+    #     'rgb(67,147,195)', #1.6
+    #     'rgb(33,102,172)', #1.8
+    #     'rgb(5,48,97)']#2
+        
+    #     contour =  go.Contour(
+    #             x = x,
+    #             y = y,
+    #             z= z_smooth,
+    #             colorscale=colorscale, #px.colors.sequential.RdBu_r,#'RdBu',
+    #             zmin=0,
+    #             zmax=2,
+    #             zmid=1,
+    #             line_smoothing=1,
+    #             reversescale=True,
+    #             connectgaps= False,
+    #             name = team_name,
+    #             visible = visible,
+    #             colorbar=dict(
+    #                 title="Excess shots<br>per hour<br>(in ratio)", # title here
+    #                 titleside='right',
+    #                 titlefont=dict(
+    #                     size=14,
+    #                     family='Arial, sans-serif')
+    #             )
+    #         )
+        
+    #     return contour
