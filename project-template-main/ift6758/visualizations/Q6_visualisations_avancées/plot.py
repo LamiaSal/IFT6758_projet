@@ -28,7 +28,7 @@ class advance_plot():
                 xref="x",
                 yref="y",
                 x=-100,
-                y=42.5,
+                y=42,
                 sizex=200,
                 sizey=85,
                 sizing="stretch",
@@ -106,18 +106,18 @@ class advance_plot():
 
         m = max(np.max(z_smooth), np.abs(np.min(z_smooth)))
         
-        colorscale =['rgb(103,0,31)', #0
-        'rgb(178,24,43)', #0.2
-        'rgb(214,96,77)', #0.4
-        'rgb(244,165,130)',#0.6
-        'rgb(253,219,199)', # 0.8
-        'rgb(250,250,250)', #0.8
-        'rgb(250,250,250)',#1.0
-        #'rgb(209,229,240)', # 1.2
-        'rgb(146,197,222)', #1.4
-        'rgb(67,147,195)', #1.6
-        'rgb(33,102,172)', #1.8
-        'rgb(5,48,97)']#2
+        colorscale =['rgb(103,0,31)',
+        'rgb(178,24,43)',
+        'rgb(214,96,77)',
+        'rgb(244,165,130)',
+        'rgb(253,219,199)',
+        'rgb(250,250,250)',
+        'rgb(250,250,250)',
+        #'rgb(209,229,240)',
+        'rgb(146,197,222)',
+        'rgb(67,147,195)',
+        'rgb(33,102,172)',
+        'rgb(5,48,97)']
         
         contour =  go.Contour(
                 x = x,
@@ -142,60 +142,3 @@ class advance_plot():
             )
         
         return contour
-
-    # def get_contour(self,team_name:str,visible:bool = False):
-    
-    #     team_data = self.df[['x_coord','y_coord',team_name]]
-        
-        
-    #     z = np.ones((201,101))
-    #     for index,row in team_data.iterrows():
-    #         z[int(row['x_coord'])+100,int(row['y_coord'])+50] = int(row[team_name])
-
-    #     z_smooth = gaussian_filter(z.T,self.sigma)       
-
-    #     x = np.array(range(-100,101))
-    #     y = np.array(range(-50,51))
-
-    #     z_smooth = np.around(z_smooth,1)
-
-    #     #print("yo",z_smooth)
-
-    #     m = max(np.max(z_smooth), np.abs(np.min(z_smooth)))
-        
-    #     colorscale =['rgb(103,0,31)', #0
-    #     'rgb(178,24,43)', #0.2
-    #     'rgb(214,96,77)', #0.4
-    #     'rgb(244,165,130)',#0.6
-    #     'rgb(253,219,199)', # 0.8
-    #     'rgb(250,250,250)', #0.8
-    #     'rgb(250,250,250)',#1.0
-    #     #'rgb(209,229,240)', # 1.2
-    #     'rgb(146,197,222)', #1.4
-    #     'rgb(67,147,195)', #1.6
-    #     'rgb(33,102,172)', #1.8
-    #     'rgb(5,48,97)']#2
-        
-    #     contour =  go.Contour(
-    #             x = x,
-    #             y = y,
-    #             z= z_smooth,
-    #             colorscale=colorscale, #px.colors.sequential.RdBu_r,#'RdBu',
-    #             zmin=0,
-    #             zmax=2,
-    #             zmid=1,
-    #             line_smoothing=1,
-    #             reversescale=True,
-    #             connectgaps= False,
-    #             name = team_name,
-    #             visible = visible,
-    #             colorbar=dict(
-    #                 title="Excess shots<br>per hour<br>(in ratio)", # title here
-    #                 titleside='right',
-    #                 titlefont=dict(
-    #                     size=14,
-    #                     family='Arial, sans-serif')
-    #             )
-    #         )
-        
-    #     return contour
