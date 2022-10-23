@@ -141,7 +141,7 @@ def get_file_event_rows_data(data,type_season):
 if __name__ == '__main__':
 
     # list all the json files extracted in datasets
-    dir_year = [ join("../datasets/raw/", d_y) for d_y in listdir("../datasets/raw/")]
+    dir_year = [ join("./datasets/raw/", d_y) for d_y in listdir("./datasets/raw/")]
     dir_pl_reg = [(join(path, d_pl_reg),d_pl_reg)  for path in dir_year for d_pl_reg in listdir(path)  ]
     fichiers = [(join(dir_path, f),d_pl_reg) for (dir_path, d_pl_reg) in dir_pl_reg\
         for f in listdir(dir_path) if isfile(join(dir_path, f))]
@@ -167,4 +167,4 @@ if __name__ == '__main__':
     df = pd.DataFrame(all_list_data, columns=columns_name)
 
     # save in datasets directory
-    df.to_csv("../datasets/tidy_data.csv", index=False)
+    df.to_csv("./datasets/tidy_data_b.csv", index=False)
