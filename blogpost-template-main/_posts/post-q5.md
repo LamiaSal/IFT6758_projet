@@ -2,7 +2,7 @@
 
 <h2>5.1 Graphique 1 </h2>
 <figure >
-    <img src="../assets/Question 5/5.1.png" style="width:90%; margin:auto;">
+    <img src="../assets/Question 5/5.1.png" style="width:auto; margin:auto;">
 </figure>
 
 <h2>Réponse:</h2>
