@@ -5,7 +5,7 @@ In the repository you'll find the work we've done through the whole project of t
 ## Data wrangling and exploration
 In the ***first part*** we had to extract, tidy and visualize data of the LNH statistics API (https://gitlab.com/dword4/nhlapi). In this repository you'll find :
 
-- the directory "datasets" where the json files were downloaded and where we've put all the csv files created from the API data. On this github no files are uploaded. Nevertheless, "tidy_data.csv" file on a accessible google drive link (). In this file we have all the necessary data to plot the visualizations.
+- the directory [`./datasets`](./datasets) where the json files were downloaded and where we've put all the csv files created from the API data. On this github no files are uploaded. Nevertheless, "tidy_data.csv" file on a accessible google drive link (https://drive.google.com/file/d/1vuIGiBWieIcheFwg2HYMPN2R5I3KWEpX/view?usp=sharing). In this file we have all the necessary data to plot the visualizations.
 - the directory "figures" where can be found a map of the NHL rink :
 
 <p align="center">
@@ -13,7 +13,16 @@ In the ***first part*** we had to extract, tidy and visualize data of the LNH st
 <p>
 
 The image can be found in [`./figures/nhl_rink.png`](./figures/nhl_rink.png).
-
+    
+In the directory [`./ift6758`](./ift6758), can be found all the the sources code in .py for the differents questions:
+    
+- The code to fetch the json files from the API can be found in [`./ift6758/data`](./ift6758/data)
+- The code to tidy the json files can be found in [`./ift6758/tidy_data`](./ift6758/tidy_data). The jupyternotebook version can also be found in [`./notebooks/Q.4_tidying_data.ipynb`](./notebooks/Q.4_tidying_data.ipynb). This code provides a "tidy_data.csv" that is accesible from this link (https://drive.google.com/file/d/1vuIGiBWieIcheFwg2HYMPN2R5I3KWEpX/view?usp=sharing). All the following tasks (debogger, and visualizations code can be ran without downloading anything).
+- In [`./ift6758/visualizations`](./ift6758/visualizations) there are several code that are used for the different visualizations. Especially, you may find the code for the advanced visualization (a preprocessing method [`./ift6758/visualizations/Q6_visualisations_avancées/preprocess.py`](./ift6758/visualizations/Q6_visualisations_avancées/preprocess.py) to extract excess shot rate per hour per season per team, and a method to plot the shot maps [`./ift6758/visualizations/Q6_visualisations_avancées/plot.py`](./ift6758/visualizations/Q6_visualisations_avancées/plot.py)).
+    
+In the directory [`./notebooks`](./notebooks), can be found all the the jupyternotebooks to answer the different questions. 
+- The jupyternotebooks [`./notebooks/Q.2_Outil_de_débogage.ipynb`](./notebooks/Q.2_Outil_de_débogage.ipynb), [`./notebooks/Q.5_visualisations_simples.ipynb`](./notebooks/Q.5_visualisations_simples.ipynb) and [`./notebooks/Q.6_visualisations_avancées.ipynb`](./notebooks/Q.6_visualisations_avancées.ipynb) can be ran without prior requirements (without downloading anything). 
+- To run the jupyternotebook  [`./notebooks/Q.4_tidying_data.ipynb`](./notebooks/Q.4_tidying_data.ipynb) you'll have to fetch the json files by running [`./ift6758/data/data_fetching.py`](./ift6758/data/data_fetching.py)
 
 
 ## Installation
