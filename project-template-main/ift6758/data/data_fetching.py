@@ -128,7 +128,7 @@ def create_dir(dir_name:str) -> None:
     create a directory if it doesn't exist
     '''
     if not os.path.exists(dir_name):
-        os.mkdir(dir_name)
+        os.makedirs(dir_name)
 
 
 
