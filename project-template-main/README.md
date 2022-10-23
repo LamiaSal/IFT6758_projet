@@ -1,20 +1,20 @@
-# IFT6758 Repo Template
+# IFT6758 Repo Project
 
-This template provides you with a skeleton of a Python package that can be installed into your local machine.
-This allows you access your code from anywhere on your system if you've activated the environment the package was installed to.
-You are encouraged to leverage this package as a skeleton and add all of your reusable code, functions, etc. into relevant modules.
-This makes collaboration much easier as the package could be seen as a "single source of truth" to pull data, create visualizations, etc. rather than relying on a jumble of notebooks.
-You can still run into trouble if branches are not frequently merged as work progresses, so try to not let your branches diverge too much!
+In the repository you'll find the work we've done through the whole project of the MILA course IFT6758. This project was divided in 3 parts.
 
-Also included in this repo is an image of the NHL ice rink that you can use in your plots.
-It has the correct location of lines, faceoff dots, and length/width ratio as the real NHL rink.
-Note that the rink is 200 feet long and 85 feet wide, with the goal line 11 feet from the nearest edge of the rink, and the blue line 75 feet from the nearest edge of the rink.
+## Data wrangling and exploration
+In the ***first part*** we had to extract, tidy and visualize data of the LNH statistics API (https://gitlab.com/dword4/nhlapi). In this repository you'll find :
+
+- the directory "datasets" where the json files were downloaded and where we've put all the csv files created from the API data. On this github no files are uploaded. Nevertheless, "tidy_data.csv" file on a accessible google drive link (). In this file we have all the necessary data to plot the visualizations.
+- the directory "figures" where can be found a map of the NHL rink :
 
 <p align="center">
 <img src="./figures/nhl_rink.png" alt="NHL Rink is 200ft x 85ft." width="400"/>
 <p>
 
 The image can be found in [`./figures/nhl_rink.png`](./figures/nhl_rink.png).
+
+
 
 ## Installation
 
