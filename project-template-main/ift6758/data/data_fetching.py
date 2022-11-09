@@ -136,7 +136,7 @@ def create_dir(dir_name:str) -> None:
 if __name__ == '__main__':
 
     path_out = os.path.join('datasets','raw')
-    years = range(2016,2021)
+    years = range(2015,2020)
 
     loader = NHL_Season_Data_Fetcher(years,path_out)
     d = loader.get_seasons()
