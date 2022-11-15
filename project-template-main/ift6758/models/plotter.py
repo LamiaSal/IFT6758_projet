@@ -4,7 +4,6 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 from sklearn import metrics
 from sklearn.calibration import CalibrationDisplay
-import matplotlib.ticker as mtick
 
 sns.set_theme()
 
@@ -45,6 +44,7 @@ def log_GoalRate(y_probs,experiment):
     plt.yticks(np.array(ys)/100,yticks)
     plt.xticks(np.array(ys)/100,ys)
     experiment.log_figure(figure=fig) 
+    
 def log_Cumulative(y_probs,experiment):
     centiles = range(0,101,5)
     value = np.percentile(y_probs,centiles)
@@ -64,6 +64,7 @@ def log_Cumulative(y_probs,experiment):
     plt.yticks(np.array(ys)/100,yticks)
     plt.xticks(np.array(ys)/100,ys)
     experiment.log_figure(figure=fig)  
+
 def log_metrics(y_true,y_preds,experiment):
     acc = metrics.accuracy_score(y_true,y_preds)
     recall = metrics.recall_score(y_true,y_preds,average='macro')
@@ -77,8 +78,8 @@ def log_metrics(y_true,y_preds,experiment):
         'f_score':f_score
         })
     matrix = metrics.confusion_matrix(y_true,y_preds)
-    experiment.log_confusion_matrix(labels=["Missed", "Goal"],
-                                    matrix=matrix)
+    experiment.log_confusion_matrix(labels=["Missed", "Goal"],matrix=matrix)
+
 def log_All(y_true,y_preds,y_probs,experiment):
     log_metrics(y_true,y_preds,experiment)
     log_ROC(y_true,y_preds,experiment)
