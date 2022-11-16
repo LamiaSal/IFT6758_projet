@@ -4,6 +4,7 @@
 *.tar.gz
 *.pkl
 *.json
+*.csv
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -135,5 +136,5 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-# environement variables
-define_env_variable.py
+
+# data directory
