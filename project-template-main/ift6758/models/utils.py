@@ -38,6 +38,14 @@ def save_metrics_and_models_on_comet(model,y_val,y_val_pred,y_val_prob,model_nam
 
     experiment.end()
 
+
+def download_model(register_name):
+    load_dotenv()
+    api = API()
+    # Download a Registry Model:
+    api.download_registry_model("princesslove", f"{register_name}", "1.0.0",
+                                output_path="../comet_models/", expand=True)
+
 def predict_model(model,X_val):
     # predict on validation set
     y_val_pred = model.predict(X_val)
@@ -96,4 +104,4 @@ def preprocess(df, features,standarize=False):
         scaler = StandardScaler()
         X = scaler.fit_transform(X)
     
-    return X, Y.values,df_proc
+    return X, Y.values,df_proc.reset_index(drop=True)
