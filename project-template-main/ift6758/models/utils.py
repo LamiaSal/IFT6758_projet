@@ -62,7 +62,7 @@ def convert_to_total_seconds(X):
     delta = timedelta(minutes=t_.minute,seconds=t_.second)
     return delta.total_seconds()
 
-def preprocess(df, features,standarize=False):
+def preprocess(df, features,standarize=False, drop_fts = [], keep_fts = []):
     df_proc = df.copy()
 
     # convert target into readable content for the models
@@ -78,6 +78,7 @@ def preprocess(df, features,standarize=False):
     # fill strength nan by 0 values
     df_proc["strength"].fillna(0.0,inplace=True)
     df_proc = df_proc.dropna()
+    df_proc_flag = df_proc.copy()
 
     # define Y (the target)
     Y = df_proc['result_event']
@@ -98,10 +99,18 @@ def preprocess(df, features,standarize=False):
     if 'last_event_type' in features:
         df_proc = pd.get_dummies(df_proc,columns=['last_event_type'])
     
+    # drop features specified by drop_fts
+    if len(drop_fts) >= 1:
+        df_proc = df_proc.drop(drop_fts, axis=1)
+    
+    # select keep_fts features
+    if len(keep_fts) >= 1:
+        df_proc = df_proc[keep_fts]
+    
     # define X and standardize it
     X = df_proc
     if standarize:
         scaler = StandardScaler()
         X = scaler.fit_transform(X)
     
-    return X, Y.values,df_proc.reset_index(drop=True)
+    return X, Y.values,df_proc.reset_index(drop=True),df_proc_flag
