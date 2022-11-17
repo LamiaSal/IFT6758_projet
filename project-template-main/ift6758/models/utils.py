@@ -22,7 +22,7 @@ def save_metrics_and_models_on_comet(model,y_val,y_val_pred,y_val_prob,model_nam
     experiment.set_name(name_experiment)
 
     # save and log model
-    model.save_model(f'../models/{model_dir}/{name_experiment}.json')
+    model.save_model(f'../models_config/{model_dir}/{name_experiment}.json')
     experiment.log_model(f"{name_experiment}_Model", f'../models_config/{model_dir}/{name_experiment}.json')
 
     # log data and finish experiment
