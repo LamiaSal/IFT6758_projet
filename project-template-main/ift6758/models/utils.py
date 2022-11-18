@@ -8,10 +8,11 @@ from comet_ml import Experiment
 import os
 from ift6758.models.plotter import *
 from comet_ml import API
+import pickle
 
 
 
-def save_metrics_and_models_on_comet(model,y_val,y_val_pred,y_val_prob,model_names,model_dir,name_experiment, register_model = True):
+def save_metrics_and_models_on_comet(model,y_val,y_val_pred,y_val_prob,model_names,model_dir,name_experiment, register_model = True, sklearn_model=False):
     load_dotenv()
     
     experiment = Experiment(
@@ -21,9 +22,16 @@ def save_metrics_and_models_on_comet(model,y_val,y_val_pred,y_val_prob,model_nam
         )
     experiment.set_name(name_experiment)
 
+    
     # save and log model
-    model.save_model(f'../models_config/{model_dir}/{name_experiment}.json')
-    experiment.log_model(f"{name_experiment}_Model", f'../models_config/{model_dir}/{name_experiment}.json')
+    if sklearn_model:
+        pkl_filename = f'../models_config/{model_dir}/pickle_model.pkl'
+        with open(pkl_filename, 'wb') as file:
+            pickle.dump(model, file)
+        experiment.log_model(f"{name_experiment}_Model", pkl_filename)
+    else :
+        model.save_model(f'../models_config/{model_dir}/{name_experiment}.json')
+        experiment.log_model(f"{name_experiment}_Model", f'../models_config/{model_dir}/{name_experiment}.json')
 
     # log data and finish experiment
     log_All(y_val,y_val_pred,y_val_prob,model_names,experiment)
@@ -51,6 +59,26 @@ def predict_model(model,X_val):
     y_val_pred = model.predict(X_val)
     y_val_prob = model.predict_proba(X_val)
     return y_val_pred,y_val_prob[:,1]
+
+def compute_metrics(y_true,y_preds,model_names):
+    acc=[]
+    recall = []
+    precision = []
+    f_score = []
+    for y_pred, model_name in zip(y_preds, model_names):
+        acc.append(metrics.accuracy_score(y_true,y_pred))
+        recall.append(metrics.recall_score(y_true,y_pred,average='macro'))
+        precision.append(metrics.precision_score(y_true,y_pred,average='macro'))
+        f_score.append(metrics.f1_score(y_true,y_pred,average='macro'))
+
+    dict_data = {
+    'model_name':model_names,
+    'Accuracy':acc,
+    'Recall':recall,
+    'Precision':precision,
+    'f_score':f_score
+    }
+    return pd.DataFrame.from_dict(dict_data)
 
 def convert_to_float(X):
     if X == "Goal":
