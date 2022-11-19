@@ -22,11 +22,13 @@ def save_metrics_and_models_on_comet(model,y_val,y_val_pred,y_val_prob,model_nam
         )
     experiment.set_name(name_experiment)
 
-    
+   
+    if not os.path.exists(f'../models_config/{model_dir}'):
+        os.makedirs(f'../models_config/{model_dir}')
     # save and log model
     if sklearn_model:
-        pkl_filename = f'../models_config/{model_dir}/pickle_model.pkl'
-        with open(pkl_filename, 'wb') as file:
+        pkl_filename = f'../models_config/{model_dir}/{name_experiment}.pkl'
+        with open(pkl_filename, 'wb+') as file:
             pickle.dump(model, file)
         experiment.log_model(f"{name_experiment}_Model", pkl_filename)
     else :
