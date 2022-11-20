@@ -9,22 +9,23 @@ sns.set_theme()
 
 def log_ROC(y_true,y_preds,model_names = None):
     fig = plt.figure()
+    plt.title('Receiver Operating Characteristic')
+    plt.plot([0, 1], [0, 1],'r--')
+    plt.ylabel('True Positive Rate')
+    plt.xlabel('False Positive Rate')
     if isinstance(y_preds, list):
         for y_pred, model_name in zip(y_preds,model_names):
             fpr, tpr, _ = metrics.roc_curve(y_true, y_pred)
             roc_auc = metrics.auc(fpr, tpr)
-            plt.title('Receiver Operating Characteristic')
-            plt.plot(fpr, tpr, 'b', label = f'{model_name} AUC = %0.2f' % roc_auc)
+            plt.plot(fpr, tpr, label = f'{model_name} AUC = %0.2f' % roc_auc)
     else : 
         fpr, tpr, _ = metrics.roc_curve(y_true, y_preds)
         roc_auc = metrics.auc(fpr, tpr)
-        plt.title('Receiver Operating Characteristic')
-        plt.plot(fpr, tpr, 'b', label = f'{model_names} AUC = %0.2f' % roc_auc)
-
+        plt.plot(fpr, tpr, label = f'{model_names} AUC = %0.2f' % roc_auc)
+    
+    
     plt.legend(loc = 'lower right')
-    plt.plot([0, 1], [0, 1],'r--')
-    plt.ylabel('True Positive Rate')
-    plt.xlabel('False Positive Rate')
+    
     return fig, roc_auc
     
 
@@ -34,7 +35,7 @@ def log_Calibration(y_true,y_probs,model_names = None):
     fig, ax = plt.subplots()
     if isinstance(y_probs, list):
         for y_prob, model_name in zip(y_probs,model_names):
-            disp = CalibrationDisplay.from_predictions(y_true, y_prob,name=model_name,ax=ax)
+            disp = CalibrationDisplay.from_predictions(y_true, y_prob,name=model_name,pos_label=1,ax=ax)
     else :
         disp = CalibrationDisplay.from_predictions(y_true, y_probs,name=model_names,ax=ax)
     disp.ax_.set_title('Calibration curve')
