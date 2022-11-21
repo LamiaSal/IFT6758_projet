@@ -129,24 +129,26 @@ def preprocess(df, features,standarize=False, drop_fts = [], keep_fts = []):
         df_proc['periodTime']=df_proc['periodTime'].apply(convert_to_total_seconds)
     
     # one hot encoding of the shot_type
+    
     if 'shot_type' in features:
         df_proc['shot_type'] = df_proc['shot_type'].dropna()
         df_proc = pd.get_dummies(df_proc,columns=['shot_type'])   
 
-    # check if all shot types expected have been withdraw
-    for shot_type in SHOT_TYPES :
-        if shot_type not in df_proc.columns :
-            # if in the incoming dataset, shot type is lacking, then we add a column with only zeros
-            df_proc[event_type]=0 
+        # check if all shot types expected have been withdraw
+        for shot_type in SHOT_TYPES :
+            if shot_type not in df_proc.columns :
+                # if in the incoming dataset, shot type is lacking, then we add a column with only zeros
+                df_proc[shot_type]=0 
+    
     
     # one hot encoding of the last_event_type
     if 'last_event_type' in features:
         df_proc = pd.get_dummies(df_proc,columns=['last_event_type'])
 
-    # check if all events types expected have been withdraw
-    for event_type in LAST_EVENT_TYPES :
-        if event_type not in df_proc.columns :
-            df_proc[event_type]=0
+        # check if all events types expected have been withdraw
+        for event_type in LAST_EVENT_TYPES :
+            if event_type not in df_proc.columns :
+                df_proc[event_type]=0
 
 
     # drop features specified by drop_fts
