@@ -67,18 +67,22 @@ def compute_metrics(y_true,y_preds,model_names):
     recall = []
     precision = []
     f_score = []
+    auc = []
     for y_pred, model_name in zip(y_preds, model_names):
         acc.append(metrics.accuracy_score(y_true,y_pred))
         recall.append(metrics.recall_score(y_true,y_pred,average='macro'))
         precision.append(metrics.precision_score(y_true,y_pred,average='macro'))
         f_score.append(metrics.f1_score(y_true,y_pred,average='macro'))
+        fpr, tpr, _ = metrics.roc_curve(y_true, y_pred)
+        auc.append(metrics.auc(fpr, tpr))
 
     dict_data = {
     'model_name':model_names,
     'Accuracy':acc,
     'Recall':recall,
     'Precision':precision,
-    'f_score':f_score
+    'f_score':f_score,
+    'AUC':auc
     }
     return pd.DataFrame.from_dict(dict_data)
 
