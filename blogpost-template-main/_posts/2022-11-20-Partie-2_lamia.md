@@ -2,90 +2,6 @@
 layout: post
 title: Partie 2
 ---
-<h1>4. Ingénierie des caractéristiques II </h1>
-
-<table>
-  <tr>
-    <th>Caractéristique</th>
-    <th>Nom de la colonne</th>
-    <th>Description</th>
-  </tr>
-  <tr>
-    <td>Coordonnées</td>
-    <td>x_coord et y_coord</td>
-    <td>Coordonnées de l'événement</td>
-  </tr>
-  <tr>
-    <td>Distance</td>
-    <td>distance</td>
-    <td>Distance entre le joueur et le but adverse</td>
-  </tr>
-  <tr>
-    <td>Angle</td>
-    <td>angle</td>
-    <td>Angle entre le joueur et le but</td>
-  </tr>
-  <tr>
-    <td>Type de tir</td>
-    <td>shot_type</td>
-    <td>Type du tir effectué (ex: Slap Shot)</td>
-  </tr>
-  <tr>
-    <td>Filet désert</td>
-    <td>empty_net</td>
-    <td>Vrai si le filet est désert</td>
-  </tr>
-  <tr>
-    <td>Dernier événement</td>
-    <td>last_event_type</td>
-    <td>Type du dernier événement (ex: Faceoff)</td>
-  </tr>
-  <tr>
-    <td>Coordonnées du dernier événement</td>
-    <td>last_x_coord et last_y_coord </td>
-    <td>Coordonnées du dernier événement</td>
-  </tr>
-  <tr>
-    <td>Distance avec le dernier événement</td>
-    <td>distance_from_last</td>
-    <td>Distance entre le tir et le dernier événement</td>
-  </tr>
-  <tr>
-    <td>Temps depuis le dernier événement</td>
-    <td>seconds_since_last</td>
-    <td>Temps entre le tir et le dernier événement</td>
-  </tr>
-  <tr>
-    <td>Rebon</td>
-    <td>Rebound</td>
-    <td>Vrai si le dernier événement était un tir</td>
-  </tr>
-  <tr>
-    <td>Changement d'angle</td>
-    <td>angle_change</td>
-    <td>Différence d'angle entre ce tir et le tir précédent</td>
-  </tr>
-  <tr>
-    <td>Vitesse</td>
-    <td>speed</td>
-    <td>Vitesse entre les deux événements</td>
-  </tr>
-  <tr>
-    <td>Supériorité numérique</td>
-    <td>powerplay</td>
-    <td>Vrai, si l'équipe attaquante à plus de joueur sur la glace</td>
-  </tr>
-  <tr>
-    <td>Nombre de joueur de l'équipe attaquante</td>
-    <td>team_that_shot_nb</td>
-    <td>Nombre de joueur de l'équipe attaquante</td>
-  </tr>
-  <tr>
-    <td>Nombre de joueur de l'équipe défendante</td>
-    <td>other_team_nb</td>
-    <td>Nombre de joueur de l'équipe défendante</td>
-  </tr>
-</table>
 
 <h1>5. Modèles avancés </h1>
 <h1>5.1. XGboost avec comme features l'angle et la distance</h1>
@@ -221,21 +137,24 @@ Nous avons défini la fonction objective comme celle par défaut pour une classi
 Commentaires : TODO
 Une fois réglé, intégrez les courbes correspondant au meilleur modèle aux quatre figures de votre article de blog et comparez brièvement les résultats au baseline XGBoost de la premi`re partie. Incluez un lien vers l'entrée comet.ml appropriée pour cette expérience et enregistrez ce modèle dans le registre des modèles.
 
-### 5.3. XGboost paramétré avec features selection
+<h2>5.3. XGboost paramétré avec features selection</h2>
 
-Pour cette partie on testé plusieurs techniques de sélection de features.
+Pour cette partie on a testé plusieurs techniques de sélection de features.
 
-#### 5.3.1 Sélécetion avec Shap
-Ensuite 
+<h3>5.3.1 Sélection avec Shap</h3>
+
+Tout d'abord nous avons évaluer quelles features étaient les plus importantes pour les prédictions du modèle XGBoost que nous avons paramétré plutôt. Pourr cela nous avons utilisé la librairy [SHAP](https://github.com/slundberg/shap).
 
 <table>
   <tr>
-    <td><img src="../assets/Part_2_Q6/Base_NN/f2.svg" alt="cheese pizza"></td>
-    <td><img src="../assets/Part_2_Q6/Base_NN/f3.svg" alt="cheese pizza"></td>  
+    <td><img src="../assets/Part_2_Q5/q5_3/shap_barplot.png" alt="cheese pizza"></td>
+    <td><img src="../assets/Part_2_Q5/q5_3/shap_waterfall.png" alt="cheese pizza"></td>  
   </tr>
 </table>
 
-#### 5.3.1 Suppression des redondances avec une HeatMap
+Après avoir visualisé les features qui aident le plus notre modèle à prédire ce qu'on veut, on a décidé de ne sélectionner que les features donnant un score shape supéreieur à 0.02 (en valeur absolu).
+
+<h3>5.3.2 Suppression des redondances avec une HeatMap</h3>
 
 Tout d'abord nous avons plot le heatmap des features pour observer et supprimer les redondances. Notamment, nous avons supprimé la feature 'last_event_type_Shot' qui est très fortement corrélé à "rebound". "rebound" étant plus corrélé à notre target "result_event" nous avons préféré le conserver.
 
@@ -243,10 +162,90 @@ Tout d'abord nous avons plot le heatmap des features pour observer et supprimer 
     <img src="../assets/Part_2_Q5/q5_3/heatmap.png" style="width:auto; margin:auto;">
 </figure>
 
-#### 5.3.1 Séléction par Variance
-After this first features séléction ofbased on the heatmap we tried different features séléction such as : 
-- [VarianceThreshold](https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.VarianceThreshold.html) which is a selector that removes all low-variance features.
-- Lasso that we computed using sklearn libraries [SelectModel](https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.SelectFromModel.html) and the model [LinearSVC](https://scikit-learn.org/stable/modules/generated/sklearn.svm.LinearSVC.html)
+
+Aprés cette première selection de features basé sur le heatmap nous avons testé différentes séléction de features. ***Pour chacune d'entre elles nous avons supprimé au préalable la redondance 'last_event_type_Shot'***.
+<h3> 5.3.3 Sélection de features basé sur la variance </h3>
+
+[VarianceThreshold](https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.VarianceThreshold.html) qui est un selecteur qui supprime toutes les features à faible variance.
+  
+```python 
+selector = VarianceThreshold(threshold=0.95)
+```
+
+Cette méthode consevre toutes les features.
+
+<h3> 5.3.4 Sélection de features basé sur le LASSO</h3>
+Lasso that we computed using sklearn libraries [SelectModel](https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.SelectFromModel.html) and the model [LinearSVC](https://scikit-learn.org/stable/modules/generated/sklearn.svm.LinearSVC.html)
+
+Voici comment nous avons réalisé le LASSO : 
+
+```python
+xgb_lasso = Pipeline([
+  ('feature_selection', SelectFromModel(LinearSVC(C=0.001, penalty="l1", dual=False))),
+  ('classification', XGBClassifier(scale_pos_weight = 4))
+])
+```
+
+Le lasso supprimer de sa sélection les features : 'periodTime','x_coord', 'angle','last_x_coord', 'last_y_coord', 'angle_change' 'shot_type_Backhand','shot_type_Slap Shot', 'last_event_type_Blocked Shot', 'last_event_type_Missed Shot',
+
+<h3>5.3.5 Sélection de features basé sur le Seqential forward/backward</h3>
+
+On a pensé et essayer d'appliquer cette méthode mais elle est très couteuses en temps et nous avons donc abandonné l'idée.
+
+<h3>5.3.6 Sélection de features basé une métrique</h3>
+L'idée est de séléctionner les k best features en se basant sur la métirque [f_classif](https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.f_classif.html#sklearn.feature_selection.f_classif).
+
+Pour choisir le nombre k de features optimales nous les avons toutes testés en les évaluant sur 4 métriques (Accuracy, f1 score, precision et recall).
+
+
+<figure >
+    <img src="../assets/Part_2_Q5/q5_3/fkbest.png" style="width:auto; margin:auto;">
+</figure>
+
+Finalement c'est pour k=28 que les meilleurs résultats sont obtenus.
+***La méthode des k best exclus la feature 'x_coord' de sa séléction.***
+
+<h3> 5.3.7 Comparaison des méthodes de séléctions</h3>
+
+Finalement, nous avons comparé toutes ces séléctions entre elles en utilisant le même paramétrage de modèle XGBoost suivant :
+
+```python
+ model = XGBClassifier(scale_pos_weight = 4)
+```
+Ce choix de paramétrage a été fait pour attenuer l'imbalancement des données. Suite à cette comparaison nous avons conclus que la meilleur sélection était tout simplement de prendre toutes les features sauf les redondantes, c'est à dire le 'last_event_type_Shot' dans notre cas.
+
+Voici les figures comparant les résultats des séléctions de features.
+
+<table>
+  <tr>
+    <td><img src="../assets/Part_2_Q5/q5_3/f2_compare.png" alt="cheese pizza"></td>
+    <td><img src="../assets/Part_2_Q5/q5_3/f3_compare.png" alt="cheese pizza"></td>  
+  </tr>
+  <tr>
+    <td><img src="../assets/Part_2_Q5/q5_3/f1_compare.png" alt="cheese pizza"></td>
+    <td><img src="../assets/Part_2_Q5/q5_3/f4_compare.png" alt="cheese pizza"></td>   
+  </tr>  
+</table>
+
+
+<figure >
+    <img src="../assets/Part_2_Q5/q5_3/table_comparison.png" style="width:auto; margin:auto;">
+</figure>
+
+NB:
+- all_fts : toutes les features sans exception (même les redondantes).
+- shap :  les features selectionnées par analyse des SHAP values et avec suppression de redondances.
+- variance : features selectionnées avec la méthode des variance (après suppression de redondances). Dans notre cas cela revient à considéré toutes les features sauf les redondantes, cas la méthode de la variance ne fait aucune sélection.
+- lasso : features selectionnées avec la méthode LASSO (après suppression de redondances).
+- fKBest : les 28 meilleurs features basé sur le f_classif score (après suppression de redondances).
+
+
+On observe que les résultats entre toutes ces séléctions sont assez similaire. La séléction avec les valeurs Shap était peut être un peu brutal, il aurait fallut considérer un plus grand nombre de features peut être dans ce cas.
+
+<h3> 5.3.8 Grid Search avec les meilleurs features selectionnés </h3>
+
+L'expèrience comet associé à cette question peut être trouvé au lien suivant : 
+[question 5.3](https://www.comet.com/princesslove/itf-6758-team-4/38505bd6308c472084e1f4d53f7d650a?experiment-tab=chart&showOutliers=true&smoothing=0&transformY=smoothing&xAxis=wall)
 
 <table>
  <tr>
@@ -255,161 +254,38 @@ After this first features séléction ofbased on the heatmap we tried different 
   </tr>
   <tr>
     <td>Accuracy</td>
-    <td>0.635</td>  
+    <td>0.875</td>  
   </tr>
   <tr>
     <td>Precision</td>
-    <td>0.546</td>   
+    <td>0.632</td>   
   </tr>  
   <tr>
     <td>Recall</td>
-    <td>0.628</td>   
+    <td>0.631</td>   
   </tr>  
   <tr>
     <td>f score</td>
-    <td>0.5</td>   
+    <td>0.631</td>   
   </tr>  
   <tr>
     <td>AUC</td>
-    <td>0.628</td>   
+    <td>0.631</td>   
   </tr>  
 </table>
 
 <table>
   <tr>
-    <td><img src="../assets/Part_2_Q6/Base_NN/f2.svg" alt="cheese pizza"></td>
-    <td><img src="../assets/Part_2_Q6/Base_NN/f3.svg" alt="cheese pizza"></td>  
+    <td><img src="https://s3.amazonaws.com/comet.ml/image_38505bd6308c472084e1f4d53f7d650a-8zXdDJ9QlOE4s6LwcsMkgLUGX.svg" alt="cheese pizza"></td>
+    <td><img src="https://s3.amazonaws.com/comet.ml/image_38505bd6308c472084e1f4d53f7d650a-qUX3pC7PzuwKXB0IsFSANninM.svg" alt="cheese pizza"></td>  
   </tr>
   <tr>
-    <td><img src="../assets/Part_2_Q6/Base_NN/f1.svg" alt="cheese pizza"></td>
-    <td><img src="../assets/Part_2_Q6/Base_NN/f4.svg" alt="cheese pizza"></td>   
+    <td><img src="https://s3.amazonaws.com/comet.ml/image_38505bd6308c472084e1f4d53f7d650a-44cqNBX2ZgWNFG2pRWL0kKhTq.svg"></td>
+    <td><img src="https://s3.amazonaws.com/comet.ml/image_38505bd6308c472084e1f4d53f7d650a-lebgmtZ5XTkMu3f5AawxZKsh4.svg" alt="cheese pizza"></td>   
   </tr>  
 </table>
 
 
+Commentaire :
 
-<h1>6. Faites de votre mieux! </h1>
-
-### 6.1 Réseaux neuronaux entrainés avec toutes les caractéristiques
-<table>
- <tr>
-    <th>Métrique</th>
-    <th>Valeur</th>
-  </tr>
-  <tr>
-    <td>Accuracy</td>
-    <td>0.904</td>  
-  </tr>
-  <tr>
-    <td>Precision</td>
-    <td>0.68</td>   
-  </tr>  
-  <tr>
-    <td>Recall</td>
-    <td>0.54</td>   
-  </tr>  
-  <tr>
-    <td>f score</td>
-    <td>0.55</td>   
-  </tr>  
-  <tr>
-    <td>AUC</td>
-    <td>0.54</td>   
-  </tr>  
-</table>
-
-<table>
-  <tr>
-    <td><img src="../assets/Part_2_Q6/Base_NN/f2.svg" alt="cheese pizza"></td>
-    <td><img src="../assets/Part_2_Q6/Base_NN/f3.svg" alt="cheese pizza"></td>  
-  </tr>
-  <tr>
-    <td><img src="../assets/Part_2_Q6/Base_NN/f1.svg" alt="cheese pizza"></td>
-    <td><img src="../assets/Part_2_Q6/Base_NN/f4.svg" alt="cheese pizza"></td>   
-  </tr>  
-</table>
-
-### 6.1 Réseaux neuronaux avec Over Sampling
-<table>
- <tr>
-    <th>Métrique</th>
-    <th>Valeur</th>
-  </tr>
-  <tr>
-    <td>Accuracy</td>
-    <td>0.741</td>  
-  </tr>
-  <tr>
-    <td>Precision</td>
-    <td>0.613</td>   
-  </tr>  
-  <tr>
-    <td>Recall</td>
-    <td>0.795</td>   
-  </tr>  
-  <tr>
-    <td>f score</td>
-    <td>0.609</td>   
-  </tr>  
-  <tr>
-    <td>AUC</td>
-    <td>0.795</td>   
-  </tr>  
-</table>
-
-<table>
-  <tr>
-    <td><img src="../assets/Part_2_Q6/OverSampling_NN/f1.svg" alt="cheese pizza"></td>
-    <td><img src="../assets/Part_2_Q6/OverSampling_NN/f3.svg" alt="cheese pizza"></td>  
-  </tr>
-  <tr>
-    <td><img src="../assets/Part_2_Q6/OverSampling_NN/f2.svg" alt="cheese pizza"></td>
-    <td><img src="../assets/Part_2_Q6/OverSampling_NN/f4.svg" alt="cheese pizza"></td>   
-  </tr>  
-</table>
-
-
-
-### 6.1 Réseaux neuronaux avec Under Sampling
-<table>
- <tr>
-    <th>Métrique</th>
-    <th>Valeur</th>
-  </tr>
-  <tr>
-    <td>Accuracy</td>
-    <td>0.635</td>  
-  </tr>
-  <tr>
-    <td>Precision</td>
-    <td>0.546</td>   
-  </tr>  
-  <tr>
-    <td>Recall</td>
-    <td>0.628</td>   
-  </tr>  
-  <tr>
-    <td>f score</td>
-    <td>0.5</td>   
-  </tr>  
-  <tr>
-    <td>AUC</td>
-    <td>0.628</td>   
-  </tr>  
-</table>
-
-<table>
-  <tr>
-    <td><img src="../assets/Part_2_Q6/UnderSampling_NN/f3.svg" alt="cheese pizza"></td>
-    <td><img src="../assets/Part_2_Q6/UnderSampling_NN/f1.svg" alt="cheese pizza"></td>  
-  </tr>
-  <tr>
-    <td><img src="../assets/Part_2_Q6/UnderSampling_NN/f4.svg" alt="cheese pizza"></td>
-    <td><img src="../assets/Part_2_Q6/UnderSampling_NN/f2.svg" alt="cheese pizza"></td>   
-  </tr>  
-</table>
-
-
-
-
-
+TODO comparer aux autres résultats rapidement
