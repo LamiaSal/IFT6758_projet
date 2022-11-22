@@ -143,7 +143,10 @@ Pour cette partie on a testé plusieurs techniques de sélection de features.
 
 <h3>5.3.1 Sélection avec Shap</h3>
 
-Tout d'abord nous avons évaluer quelles features étaient les plus importantes pour les prédictions du modèle XGBoost que nous avons paramétré plutôt. Pourr cela nous avons utilisé la librairy [SHAP](https://github.com/slundberg/shap).
+L'expèrience comet associé à cette question peut être trouvé au lien suivant : 
+[question 5.1](https://www.comet.com/princesslove/itf-6758-team-4/da3d1de95f164994a69ecd8be274747f?experiment-tab=chart&showOutliers=true&smoothing=0&transformY=smoothing&xAxis=wall)
+
+Tout d'abord nous avons évalué quelles features étaient les plus importantes pour les prédictions du modèle XGBoost que nous avons paramétré plutôt. Pourr cela nous avons utilisé la librairy [SHAP](https://github.com/slundberg/shap).
 
 <table>
   <tr>
@@ -289,3 +292,76 @@ L'expèrience comet associé à cette question peut être trouvé au lien suivan
 Commentaire :
 
 TODO comparer aux autres résultats rapidement
+
+
+## 7.2 La saison élimnatoire (Playoffs)
+<table>
+ <tr>
+    <th>Modèle</th>
+    <th>Accuracy</th>
+    <th>Precision</th>
+    <th>Recall</th>
+    <th>f score</th>
+    <th>AUC</th>
+  </tr>
+  <tr>
+    <td>LR with distance</td>
+    <td>0.909</td>
+    <td>0.454</td>
+    <td>0.500</td>
+    <td>0.476</td>
+    <td>0.500</td> 
+  </tr>
+  <tr>
+    <td>LR with angle</td>
+    <td>0.909</td>
+    <td>0.454</td>
+    <td>0.500</td>
+    <td>0.476</td>
+    <td>0.500</td> 
+  </tr>  
+  <tr>
+    <td>LR with distance and angle</td>
+    <td>0.909</td>
+    <td>0.454</td>
+    <td>0.500</td>
+    <td>0.476</td>
+    <td>0.500</td>    
+  </tr>  
+  <tr>
+    <td>XGB</td>
+    <td>0.843</td>
+    <td>0.568</td>
+    <td>0.582</td>
+    <td>0.573</td>
+    <td>0.580</td>   
+  </tr>  
+  <tr>
+    <td>NN</td>
+    <td>0.777</td>
+    <td>0.520</td>
+    <td>0.534</td>
+    <td>0.517</td>
+    <td>0.530</td>   
+  </tr>  
+</table>
+<table>
+  <tr>
+    <td><img src="../assets/Part_2_Q7/Playoff/f1.png" alt="cheese pizza"></td>
+    <td><img src="../assets/Part_2_Q7/Playoff/f2.png" alt="cheese pizza"></td>  
+  </tr>
+  <tr>
+    <td><img src="../assets/Part_2_Q7/Playoff/f3.png" alt="cheese pizza"></td>
+    <td><img src="../assets/Part_2_Q7/Playoff/f4.png" alt="cheese pizza"></td>   
+  </tr>  
+</table>
+
+Commentaire :
+
+On observe que pour la régression logistique, les résultats sont toujours les mêmes. On s'y attend car le modèle ne prédit que des "Shots" et aucun "Goal". Par contre pour notre modèle neuronales on observe que 
+
+
+Dire pourquoi les résultats sont moins bon pendant les playoffs.
+
+
+En conclusion, le modèle XGBoost reste le meilleur modèle car il donne à la fois les meilleurs résultats sur durant l'entrainement mais également durant les tests que ce soit durant la saison réguliére ou les playoffs. Toutefois on note que les résultats sont moins bon pendant les playoffs.
