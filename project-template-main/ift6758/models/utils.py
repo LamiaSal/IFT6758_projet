@@ -10,7 +10,98 @@ from ift6758.models.plotter import *
 from comet_ml import API
 import pickle
 
+SHOT_TYPES = ['shot_type_Backhand',
+       'shot_type_Deflected', 'shot_type_Slap Shot', 'shot_type_Snap Shot',
+       'shot_type_Tip-In', 'shot_type_Wrap-around', 'shot_type_Wrist Shot']
 
+LAST_EVENT_TYPES = ['last_event_type_Blocked Shot', 'last_event_type_Faceoff',
+       'last_event_type_Giveaway', 'last_event_type_Goal',
+       'last_event_type_Hit', 'last_event_type_Missed Shot',
+       'last_event_type_Penalty', 'last_event_type_Shot',
+       'last_event_type_Takeaway']
+
+COlUMNS_ORDER = ['empty_net', 'periodTime', 'period', 'x_coord', 'y_coord',
+       'distance', 'angle', 'last_x_coord', 'last_y_coord',
+       'distance_from_last', 'seconds_since_last', 'rebound',
+       'angle_change', 'speed', 'powerplay','team_that_shot_nb','other_team_nb',
+       
+       'shot_type_Backhand','shot_type_Deflected', 'shot_type_Slap Shot',
+       'shot_type_Snap Shot', 'shot_type_Tip-In', 'shot_type_Wrap-around',
+       'shot_type_Wrist Shot',
+       
+       'last_event_type_Blocked Shot', 'last_event_type_Faceoff', 'last_event_type_Giveaway',
+       'last_event_type_Goal', 'last_event_type_Hit',
+       'last_event_type_Missed Shot', 'last_event_type_Penalty',
+       'last_event_type_Shot', 'last_event_type_Takeaway']
+
+def preprocess(df, features,standarize=False, drop_fts = [], keep_fts = []):
+    df_proc = df.copy()
+
+    # convert target into readable content for the models
+    df_proc['result_event']=df_proc['result_event'].apply(convert_to_float)
+    
+    # fille empty net nan by False
+    df_proc["empty_net"].fillna(False,inplace=True)
+
+    # convert boolean data in 0 and 1
+    df_proc["empty_net"]=df_proc["empty_net"].map({True:1,False:0})
+    df_proc["rebound"]=df_proc["rebound"].map({True:1,False:0})
+    
+    # fill strength nan by 0 values
+    df_proc["strength"].fillna(0.0,inplace=True)
+    df_proc = df_proc.dropna()
+    df_proc_flag = df_proc.copy()
+
+    # define Y (the target)
+    Y = df_proc['result_event']
+
+    
+    # Select features
+    df_proc = df_proc[features]
+
+    # convert periodTime in seconds
+    if 'periodTime' in features:
+        df_proc['periodTime']=df_proc['periodTime'].apply(convert_to_total_seconds)
+    
+    # one hot encoding of the shot_type
+    if 'shot_type' in features:
+        df_proc['shot_type'] = df_proc['shot_type'].dropna()
+        df_proc = pd.get_dummies(df_proc,columns=['shot_type'])   
+
+        # check if all shot types expected have been withdraw
+        for shot_type in SHOT_TYPES :
+            if shot_type not in df_proc.columns :
+                # if in the incoming dataset, shot type is lacking, then we add a column with only zeros
+                df_proc[shot_type]=0 
+    
+    
+    # one hot encoding of the last_event_type
+    if 'last_event_type' in features:
+        df_proc = pd.get_dummies(df_proc,columns=['last_event_type'])
+
+        # check if all events types expected have been withdraw
+        for event_type in LAST_EVENT_TYPES :
+            if event_type not in df_proc.columns :
+                df_proc[event_type]=0
+    
+    order_selected_fts = [ft for ft in COlUMNS_ORDER if ft in df_proc.columns]
+    df_proc = df_proc[order_selected_fts]
+
+    # drop features specified by drop_fts
+    if len(drop_fts) >= 1:
+        df_proc = df_proc.drop(drop_fts, axis=1)
+    
+    # select keep_fts features
+    if len(keep_fts) >= 1:
+        df_proc = df_proc[keep_fts]
+    
+    # define X and standardize it
+    X = df_proc
+    if standarize:
+        scaler = StandardScaler()
+        X = scaler.fit_transform(X)
+    
+    return X, Y.values,df_proc.reset_index(drop=True),df_proc_flag
 
 def save_metrics_and_models_on_comet(model,y_val,y_val_pred,y_val_prob,model_names,model_dir,name_experiment, register_model = True, sklearn_model=False):
     load_dotenv()
@@ -96,55 +187,4 @@ def convert_to_total_seconds(X):
     delta = timedelta(minutes=t_.minute,seconds=t_.second)
     return delta.total_seconds()
 
-def preprocess(df, features,standarize=False, drop_fts = [], keep_fts = []):
-    df_proc = df.copy()
 
-    # convert target into readable content for the models
-    df_proc['result_event']=df_proc['result_event'].apply(convert_to_float)
-    
-    # fille empty net nan by False
-    df_proc["empty_net"].fillna(False,inplace=True)
-
-    # convert boolean data in 0 and 1
-    df_proc["empty_net"]=df_proc["empty_net"].map({True:1,False:0})
-    df_proc["rebound"]=df_proc["rebound"].map({True:1,False:0})
-    
-    # fill strength nan by 0 values
-    df_proc["strength"].fillna(0.0,inplace=True)
-    df_proc = df_proc.dropna()
-    df_proc_flag = df_proc.copy()
-
-    # define Y (the target)
-    Y = df_proc['result_event']
-
-    # Select features
-    df_proc = df_proc[features]
-
-    # convert periodTime in seconds
-    if 'periodTime' in features:
-        df_proc['periodTime']=df_proc['periodTime'].apply(convert_to_total_seconds)
-    
-    # one hot encoding of the shot_type
-    if 'shot_type' in features:
-        df_proc['shot_type'] = df_proc['shot_type'].dropna()
-        df_proc = pd.get_dummies(df_proc,columns=['shot_type'])    
-    
-    # one hot encoding of the last_event_type
-    if 'last_event_type' in features:
-        df_proc = pd.get_dummies(df_proc,columns=['last_event_type'])
-    
-    # drop features specified by drop_fts
-    if len(drop_fts) >= 1:
-        df_proc = df_proc.drop(drop_fts, axis=1)
-    
-    # select keep_fts features
-    if len(keep_fts) >= 1:
-        df_proc = df_proc[keep_fts]
-    
-    # define X and standardize it
-    X = df_proc
-    if standarize:
-        scaler = StandardScaler()
-        X = scaler.fit_transform(X)
-    
-    return X, Y.values,df_proc.reset_index(drop=True),df_proc_flag

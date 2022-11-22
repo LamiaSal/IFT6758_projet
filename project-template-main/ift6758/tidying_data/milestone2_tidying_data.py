@@ -16,7 +16,7 @@ if __name__ == '__main__':
         project_name='itf-6758-team-4',
         workspace='princesslove',
     )
-    
+    experiment.set_name("question4.5_dataframe")
 
     url = 'https://drive.google.com/file/d/1kM__riNHRPx5GsyuOH3yhiql3OZvwmuP/view?usp=sharing'
     path = 'https://drive.google.com/uc?export=download&id='+url.split('/')[-2]
