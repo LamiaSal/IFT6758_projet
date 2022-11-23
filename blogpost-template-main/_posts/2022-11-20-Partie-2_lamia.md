@@ -389,12 +389,12 @@ Ici nos modèles surraprennent les données de la saison reguliére durant l'ent
     </tr>
   <tr>
     <td><img src="../assets/Part_2_Q7/Regular/confusion_matrix_XGB_r.png" alt="cheese pizza"></td>
-    <td><img src="../assets/Part_2_Q7/Playoff/confusion_matrix_XGB_p.png" alt="cheese pizza"></td>
+    <td><img src="../assets/Part_2_Q7/PlayOff/confusion_matrix_XGB_p.png" alt="cheese pizza"></td>
   </tr>
   <tr>
     <td><img src="../assets/Part_2_Q7/Regular//confusion_matrix_NN_r.png" alt="cheese pizza">
     </td>
-    <td><img src="../assets/Part_2_Q7/Playoff/confusion_matrix_NN_p.png" alt="cheese pizza">
+    <td><img src="../assets/Part_2_Q7/PlayOff/confusion_matrix_NN_p.png" alt="cheese pizza">
     </td>   
   </tr>  
 </table>
