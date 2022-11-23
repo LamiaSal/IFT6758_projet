@@ -49,13 +49,13 @@ L'expèrience comet associé à cette question peut être trouvé au lien suivan
 </table>
 
 Commentaires : 
-Pour toutes les expériences nous avons diviseé nos données d'entrainements en données d'entrainements et de validations. Cela nous permet de configurer nos modèles tout en évitant que ces paramétres ne soit pas que bon sur notre base de données.
+Pour toutes les expériences nous avons diviseé nos données d'entrainements en données d'entrainements et de validations. Cela nous permet de configurer nos modèles tout en vérifiant que ces paramétres se généralisent à de nouvelles données, c'est à dire à nos données de test.
 
 Pour cette division nous avons défini unn seed commun à toutes les expériences pour pouvoir les comparer (seed fixé à 42) et on a également stratifié les données pour avoir la même répartition de label à "Goal" sur l'ensemble de données. En effet, les "Goals" étant minoritaires on veut qu'il y en ait assez dans l'ensemble d'entraiment pour que le modèle apprenne à les reconnaitre et on veut qu'il y en ait assez dans l'ensemble de validation pour avoir une évaluation pertinente.
 
-Finalement on peut voir que juste avec ces 2 features (distance et angle) le XGBoost performe beaucoup meiux que la régression logistique puisqu'il parvient à prédire des Goals.
+Finalement, on peut voir que juste avec ces 2 features (distance et angle) le XGBoost performe beaucoup mieux que la régression logistique puisqu'il parvient à prédire des Buts. 
 
-A COMPLETER PARLER DES GRAPHIQUES
+Les courbes de calibration montre que le modèle XGboost est quasiment parfaitment calibré. Tandis que, que les régressions logistques ne pouvaient pas être calibré puisqu'ils ne prédisaient que des tirs.
 
 <h1>5.2. XGboost paramétré avec toutes les features</h1>
 
@@ -134,8 +134,13 @@ Nous avons défini la fonction objective comme celle par défaut pour une classi
 </table>
 
 
-Commentaires : TODO
-Une fois réglé, intégrez les courbes correspondant au meilleur modèle aux quatre figures de votre article de blog et comparez brièvement les résultats au baseline XGBoost de la premi`re partie. Incluez un lien vers l'entrée comet.ml appropriée pour cette expérience et enregistrez ce modèle dans le registre des modèles.
+***Commentaires :***
+
+On observe que les résultats ont nettement augmenté. La courbe ROC n'est plus aligné à une droite linéaire équivalent à un modèle random. On passe de 0.501 à 0.626 de AUC. Cela vient principalement de l'argument 'scale_pos_weight' qui gére l'imbalencement des donnnées. En contre partie on a un modèle qui n'est pas calibré. Par conséquent, considérer que les probabilités en dessous de 0.5 sont des 'Shots' et ceux au dessus sont des 'Goals' n'est pas la solution optimale mais, reste une solution satisfaisante. C'est avec ce seuil de 0.5 que  nous avons calculé les autres métriques (accuracy, f1-score, presicion, recall et AUC).
+
+
+NB : On pourrait calibrer le modèle avec la fonction [CalibratedClassifierCV](https://scikit-learn.org/stable/modules/generated/sklearn.calibration.CalibratedClassifierCV.html) de sklearn.
+
 
 <h2>5.3. XGboost paramétré avec features selection</h2>
 
@@ -175,7 +180,7 @@ Aprés cette première selection de features basé sur le heatmap nous avons tes
 selector = VarianceThreshold(threshold=0.95)
 ```
 
-Cette méthode consevre toutes les features.
+Cette méthode conserve toutes les features.
 
 <h3> 5.3.4 Sélection de features basé sur le LASSO</h3>
 Lasso that we computed using sklearn libraries [SelectModel](https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.SelectFromModel.html) and the model [LinearSVC](https://scikit-learn.org/stable/modules/generated/sklearn.svm.LinearSVC.html)
@@ -221,8 +226,8 @@ Voici les figures comparant les résultats des séléctions de features.
 
 <table>
   <tr>
-    <td><img src="../assets/Part_2_Q5/q5_3/f2_compare.png" alt="cheese pizza"></td>
-    <td><img src="../assets/Part_2_Q5/q5_3/f3_compare.png" alt="cheese pizza"></td>  
+  <td><img src="../assets/Part_2_Q5/q5_3/f2_compare.png" alt="cheese pizza"></td>
+  <td><img src="../assets/Part_2_Q5/q5_3/f3_compare.png" alt="cheese pizza"></td>  
   </tr>
   <tr>
     <td><img src="../assets/Part_2_Q5/q5_3/f1_compare.png" alt="cheese pizza"></td>
@@ -243,7 +248,7 @@ NB:
 - fKBest : les 28 meilleurs features basé sur le f_classif score (après suppression de redondances).
 
 
-On observe que les résultats entre toutes ces séléctions sont assez similaire. La séléction avec les valeurs Shap était peut être un peu brutal, il aurait fallut considérer un plus grand nombre de features peut être dans ce cas.
+On observe que les résultats entre toutes ces seléctions sont assez similaire. La séléction avec les valeurs Shap était peut être un peu brutal, il aurait fallut considérer un plus grand nombre de features peut être dans ce cas.
 
 <h3> 5.3.8 Grid Search avec les meilleurs features selectionnés </h3>
 
@@ -279,8 +284,9 @@ L'expèrience comet associé à cette question peut être trouvé au lien suivan
 
 <table>
   <tr>
+  <td><img src="https://s3.amazonaws.com/comet.ml/image_38505bd6308c472084e1f4d53f7d650a-qUX3pC7PzuwKXB0IsFSANninM.svg" alt="cheese pizza"></td>  
     <td><img src="https://s3.amazonaws.com/comet.ml/image_38505bd6308c472084e1f4d53f7d650a-8zXdDJ9QlOE4s6LwcsMkgLUGX.svg" alt="cheese pizza"></td>
-    <td><img src="https://s3.amazonaws.com/comet.ml/image_38505bd6308c472084e1f4d53f7d650a-qUX3pC7PzuwKXB0IsFSANninM.svg" alt="cheese pizza"></td>  
+    
   </tr>
   <tr>
     <td><img src="https://s3.amazonaws.com/comet.ml/image_38505bd6308c472084e1f4d53f7d650a-44cqNBX2ZgWNFG2pRWL0kKhTq.svg"></td>
@@ -291,7 +297,9 @@ L'expèrience comet associé à cette question peut être trouvé au lien suivan
 
 Commentaire :
 
-TODO comparer aux autres résultats rapidement
+Les résultats au niveaux des courbes n'ont pas vraiment evolué et ce parce que nous n'avons que supprimer une features parmis toutes les autres. Toutefois, les résultats ont augmenté puisqu'on passe de 62.6% de AUC à 63.1% de AUC.
+
+NB: à noter que toutes les combinaisons des paramétres n'ont pas été testé, car on a réalisé un RandomSearch. Par conséquent une part de l'écart entre ces résultats peut provenir d'un meilleur paramétrage.
 
 
 ## 7.2 La saison élimnatoire (Playoffs)
@@ -347,8 +355,9 @@ TODO comparer aux autres résultats rapidement
 </table>
 <table>
   <tr>
+  <td><img src="../assets/Part_2_Q7/Playoff/f2.png" alt="cheese pizza"></td> 
     <td><img src="../assets/Part_2_Q7/Playoff/f1.png" alt="cheese pizza"></td>
-    <td><img src="../assets/Part_2_Q7/Playoff/f2.png" alt="cheese pizza"></td>  
+     
   </tr>
   <tr>
     <td><img src="../assets/Part_2_Q7/Playoff/f3.png" alt="cheese pizza"></td>
@@ -356,12 +365,39 @@ TODO comparer aux autres résultats rapidement
   </tr>  
 </table>
 
-Commentaire :
+***Commentaire :***
 
 On observe que pour la régression logistique, les résultats sont toujours les mêmes. On s'y attend car le modèle ne prédit que des "Shots" et aucun "Goal". Par contre pour notre modèle neuronales on observe que 
 
 
-Dire pourquoi les résultats sont moins bon pendant les playoffs.
+Pour les modèles de NN et de XGBoost on remarque qu'ils perfoment moins bien sur les playoffs. Notamment le NN passe the 58,7% de f1 score sur la saison réguliére à 51.7% de f1 score pour les playoffs. Le XGBoost est un peu plus robuste puisque qu'on a un écart de 4% entre la saison régulière et les playoffs (61.0% pour la saison réguliére et 57.3% pour les playoffs).
+
+Cela se lit aussi sur les courbes Goal Rate, Cumulative %Goals et Calibration curves. Pour le XGboost ces courbes varient très peu entre les 2 saisons tandis que pour le NN les courbes ont beacoup plus changé. Notamment sur le la courbe du Goal Rate on peut voir que la pente est beaucoup plus raide, les probabilités sont toujours centré plus ou moins à 0.8 mais avec un écart type beaucoup plus petit. ce qui montre aussi que la confidence de modèle à distinguer les Shots des Goals est plus faible. Pour le NN, on aurait peut être besoin de définir un seuil différent pour la saison regulière et la saison des playoffs.
+
+Cet écart de résultats entre les deux saisons peut être expliqué par la différence de style de jeu des joueurs et les stratégies que les équipes adoptent entre les playoffs et la saison reguliére. 
+
+En effet, premièrement, pendant les playoffs ce sont les meilleurs équipes de la saison reguliére qui jouent, donc les joueurs doivent constament bien se situer sur la glace. Secondement, comme les meilleurs joueurs sont sur la glace, les tirs se finalisent moins fréquemment en buts. La proportion de but/tir pour la saison reguliére est de 9,70% tandis que pour les playoffs celle-ci est de 9.09%. 
+
+On peut voir notamment sur les matrice de confusion ci dessous, que le NN prédit 17.4% des tirs comme des buts pour les playoffs et seulement 7,6% pour la saison reguliére. Ajuster le seuil pour les playoffs pour permettre de meilleurs résultats.
+
+Ici nos modèles surraprennent les données de la saison reguliére durant l'entrainement car il y en a plus et échoue à généraliser sur les données des playoffs. Finalement, en évaluant sur les deux ligues on observe que le NN et le XGB ne sont pas robuste sur les données du playoffs.
+
+<table>
+  <tr>
+      <th>Saison régulière</th>
+      <th>Playoffs</th>
+    </tr>
+  <tr>
+    <td><img src="../assets/Part_2_Q7/Regular/confusion_matrix_XGB_r.png" alt="cheese pizza"></td>
+    <td><img src="../assets/Part_2_Q7/Playoff/confusion_matrix_XGB_p.png" alt="cheese pizza"></td>
+  </tr>
+  <tr>
+    <td><img src="../assets/Part_2_Q7/Regular//confusion_matrix_NN_r.png" alt="cheese pizza">
+    </td>
+    <td><img src="../assets/Part_2_Q7/Playoff/confusion_matrix_NN_p.png" alt="cheese pizza">
+    </td>   
+  </tr>  
+</table>
 
 
-En conclusion, le modèle XGBoost reste le meilleur modèle car il donne à la fois les meilleurs résultats sur durant l'entrainement mais également durant les tests que ce soit durant la saison réguliére ou les playoffs. Toutefois on note que les résultats sont moins bon pendant les playoffs.
+En conclusion, le modèle XGBoost reste le meilleur modèle car il donne à la fois les meilleurs résultats durant l'entrainement mais également durant les tests que ce soit durant la saison réguliére ou les playoffs. Toutefois, on note que les résultats sont moins bon pour les playoffs car le modèle surapprend les données de la saison régulière.
