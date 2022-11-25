@@ -4,7 +4,7 @@ In the repository you'll find the work we've done through the whole project of t
 # Milestone 2
 In this ***second part*** we had to create a Comet account, do feature engineering, train models and evaluate our performance on a test set.
 
-The features enginneering was done in two jupyter notebooks [Feature enginerring for Q2](./notebook/Part_2_Q.2.ipynb) and [Feature engineering for Q4](./notebook/Part_2_Q.4-tidy.ipynb)
+The features enginneering was done in two jupyter notebooks [Feature engineering for Q2](./notebooks/Part_2_Q.2.ipynb) and [Feature engineering for Q4](./notebooks/Part_2_Q.4-tidy.ipynb)
 
 
 # Milestone 1
