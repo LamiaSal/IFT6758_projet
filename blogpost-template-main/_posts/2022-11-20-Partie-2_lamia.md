@@ -136,7 +136,7 @@ Nous avons défini la fonction objective comme celle par défaut pour une classi
 
 ***Commentaires :***
 
-On observe que les résultats ont nettement augmenté. La courbe ROC n'est plus aligné à une droite linéaire équivalent à un modèle random. On passe de 0.501 à 0.626 de AUC. Cela vient principalement de l'argument 'scale_pos_weight' qui gére l'imbalencement des donnnées. En contre partie on a un modèle qui n'est pas calibré. Par conséquent, considérer que les probabilités en dessous de 0.5 sont des 'Shots' et ceux au dessus sont des 'Goals' n'est pas la solution optimale mais, reste une solution satisfaisante. C'est avec ce seuil de 0.5 que  nous avons calculé les autres métriques (accuracy, f1-score, presicion, recall et AUC).
+On observe que les résultats ont nettement augmenté. La courbe ROC n'est plus alignée à une droite linéaire équivalente à un modèle random. On passe de 0.501 à 0.626 de AUC. Cela vient principalement de l'argument 'scale_pos_weight' qui gère l'imbalancement des données. En contrepartie, on a un modèle qui n'est pas calibré. Par conséquent, considérer que les probabilités en dessous de 0.5 sont des 'Shots' et ceux au-dessus sont des 'Goals' n'est pas la solution optimale mais, reste une solution satisfaisante. C'est avec ce seuil de 0.5 que nous avons calculé les autres métriques (accuracy, f1-score, precision, recall et AUC).
 
 
 NB : On pourrait calibrer le modèle avec la fonction [CalibratedClassifierCV](https://scikit-learn.org/stable/modules/generated/sklearn.calibration.CalibratedClassifierCV.html) de sklearn.
