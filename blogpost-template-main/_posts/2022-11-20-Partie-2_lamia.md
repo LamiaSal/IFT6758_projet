@@ -47,14 +47,14 @@ Expérience: [question 5.1](https://www.comet.com/princesslove/itf-6758-team-4/d
   </tr>  
 </table>
 
-Commentaires : 
-Pour toutes les expériences nous avons divisé nos données d'entrainements en données d'entrainements et de validations. Cela nous permet de configurer nos modèles tout en nous laissant la possibilité de vérifer que ces paramétres se généralisent à de nouvelles données (ici nos données de test).
+Commentaires : Pour toutes les expériences nous avons divisé nos données d'entrainements en données d'entrainements et de validations. Cela nous permet de configurer nos modèles tout en nous laissant la possibilité de vérifier que ces paramètres se généralisent à de nouvelles données (ici nos données de test).
 
-Pour cette division, nous avons défini un seed commun à toutes les expériences pour pouvoir les comparer (seed fixé à 42) et on a également stratifié les données pour avoir la même répartition de label à "Goal" sur l'ensemble de données. En effet, les "Goals" étant minoritaires on veut qu'il y en ait assez dans l'ensemble d'entraiment pour que le modèle apprenne à les reconnaitre et, on veut qu'il y en ait assez dans l'ensemble de validation pour avoir une évaluation pertinente.
+Pour cette division, nous avons défini un seed commun à toutes les expériences pour pouvoir les comparer (seed fixé à 42) et on a également stratifié les données pour avoir la même répartition de label à "Goal" sur l'ensemble de données. En effet, les "Goals" étant minoritaires on veut qu'il y en ait assez dans l'ensemble d'entraînement pour que le modèle apprenne à les reconnaître et, on veut qu'il y en ait assez dans l'ensemble de validation pour avoir une évaluation pertinente.
 
-Finalement, on peut voir que, juste avec ces 2 features (distance et angle), le XGBoost performe mieux que la régression logistique puisqu'il parvient à prédire des Buts ('Goals'). 
+Finalement, on peut voir que, juste avec ces 2 features (distance et angle), le XGBoost performe mieux que la régression logistique puisqu'il parvient à prédire des buts ('Goals').
 
-Les courbes de calibration montrent que le modèle XGboost est quasiment parfaitement calibré. Tandis que, que les régressions logistiques ne pouvaient pas être calibrés puisqu'ils ne prédisaient que des tirs (non-buts).
+Les courbes de calibration montrent que le modèle XGboost est quasiment parfaitement calibré. Tandis que, que les régressions logistiques ne pouvaient pas être calibrées puisqu'ils ne prédisaient que des tirs (non-buts).
+
 
 <h1>5.2. XGboost paramétré avec toutes les features</h1>
 
@@ -64,7 +64,8 @@ Expérience: [question 5.2](https://www.comet.com/princesslove/itf-6758-team-4/9
 
 Commentaires :
 
-Pour le réglage d'hyperparamétres nous avons réalisé un random search avec un stratified 5-fold cross validation et 100 combinaisons testées. En tout, cela a pris 30-40 minutes pour un total de 500 fits. Le f1 score macro a été utilisé comme métrique pour la séléction des meilleurs hyperparamètres. Les paramètres testés sont les suivants :
+Pour le réglage d'hyper paramètres nous avons réalisé un random search avec un stratified 5-fold cross validation et 100 combinaisons testées. En tout, cela a pris 30-40 minutes pour un total de 500 fits. Le f1 score macro a été utilisé comme métrique pour la sélection des meilleurs hyperparamètres. Les paramètres testés sont les suivants :
+
 
 ```python
 param_grid = {'gamma': [0,0.1,0.2,0.4,0.8,1.6,3.2,6.4,12.8,25.6],
@@ -135,7 +136,7 @@ Nous avons défini la fonction objective comme celle par défaut pour une classi
 
 ***Commentaires :***
 
-On observe que les résultats ont nettement augmenté. La courbe ROC n'est plus aligné à une droite linéaire équivalent à un modèle random. On passe de 0.501 à 0.626 de AUC. Cela vient principalement de l'argument 'scale_pos_weight' qui gére l'imbalencement des donnnées. En contre partie on a un modèle qui n'est pas calibré. Par conséquent, considérer que les probabilités en dessous de 0.5 sont des 'Shots' et ceux au dessus sont des 'Goals' n'est pas la solution optimale mais, reste une solution satisfaisante. C'est avec ce seuil de 0.5 que  nous avons calculé les autres métriques (accuracy, f1-score, presicion, recall et AUC).
+On observe que les résultats ont nettement augmenté. La courbe ROC n'est plus alignée à une droite linéaire équivalente à un modèle random. On passe de 0.501 à 0.626 de AUC. Cela vient principalement de l'argument 'scale_pos_weight' qui gère l'imbalancement des données. En contrepartie, on a un modèle qui n'est pas calibré. Par conséquent, considérer que les probabilités en dessous de 0.5 sont des 'Shots' et ceux au-dessus sont des 'Goals' n'est pas la solution optimale mais, reste une solution satisfaisante. C'est avec ce seuil de 0.5 que nous avons calculé les autres métriques (accuracy, f1-score, precision, recall et AUC).
 
 
 NB : On pourrait calibrer le modèle avec la fonction [CalibratedClassifierCV](https://scikit-learn.org/stable/modules/generated/sklearn.calibration.CalibratedClassifierCV.html) de sklearn.
@@ -149,7 +150,7 @@ Pour cette partie on a testé plusieurs techniques de sélection de features.
 
 Expérience: [XGBoost avec Shap](https://www.comet.com/princesslove/itf-6758-team-4/173fd21ad5824b2897a136f2598e84d0?experiment-tab=chart&showOutliers=true&smoothing=0&transformY=smoothing&xAxis=wall)
 
-Tout d'abord nous avons évalué quelles features/caractéristiques étaient les plus importantes pour les prédictions du modèle XGBoost que nous avons paramétré plus tôt. Pour cela, nous avons utilisé la librairy [SHAP](https://github.com/slundberg/shap).
+Tout d'abord nous avons évalué quelles features/caractéristiques étaient les plus importantes pour les prédictions du modèle XGBoost que nous avons paramétré plus tôt. Pour cela, nous avons utilisé la librairie [SHAP](https://github.com/slundberg/shap).
 
 <table>
   <tr>
@@ -158,7 +159,7 @@ Tout d'abord nous avons évalué quelles features/caractéristiques étaient les
   </tr>
 </table>
 
-Après avoir visualisé les features qui aident le plus notre modèle, on a décidé de ne sélectionner que les features donnant un score shape supéreieur à 0.02 (en valeur absolue).
+Après avoir visualisé les features qui aident le plus notre modèle, on a décidé de ne sélectionner que les features donnant un score shape supérieur à 0.02 (en valeur absolue).
 
 <h3>5.3.2 Suppression des redondances avec une HeatMap</h3>
 
@@ -169,7 +170,8 @@ Tout d'abord nous avons plot le heatmap des features pour observer et supprimer 
 </figure>
 
 
-Aprés cette première selection de features basé sur le heatmap nous avons testé différentes sélections de features. ***Pour chacune d'entre elles nous avons supprimé au préalable la redondance 'last_event_type_Shot'***.
+Après cette première sélection de features basée sur le heatmap nous avons testé différentes sélections de features. ***Pour chacune d'entre elles nous avons supprimé au préalable la redondance 'last_event_type_Shot'***.
+
 <h3> 5.3.3 Sélection de features basé sur la variance </h3>
 
 Expérience: [XGBoost avec Variance](https://www.comet.com/princesslove/itf-6758-team-4/c1fb955779bb423fa09e199aa81eb884?experiment-tab=chart&showOutliers=true&smoothing=0&transformY=smoothing&xAxis=wall)
@@ -202,7 +204,7 @@ Le lasso supprime de sa sélection les features : 'periodTime','x_coord', 'angle
 
 <h3>5.3.5 Sélection de features basé sur le Sequential forward/backward</h3>
 
-On a pensé et essayé d'appliquer cette méthode mais elle est très couteuse en temps et nous avons donc abandonné l'idée.
+On a pensé et essayé d'appliquer cette méthode mais elle est très coûteuse en temps et nous avons donc abandonné l'idée.
 
 <h3>5.3.6 Sélection de features basé une métrique</h3>
 
@@ -211,7 +213,7 @@ Expérience: [XGBoost avec fKBest](https://www.comet.com/princesslove/itf-6758-t
 
 L'idée est de séléctionner les k best features en se basant sur la métirque [f_classif](https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.f_classif.html#sklearn.feature_selection.f_classif).
 
-Pour choisir le nombre k de features optimales nous les avons toutes testés en les évaluant sur 4 métriques (Accuracy, f1 score, precision et recall).
+Pour choisir le nombre k de features optimales nous les avons toutes testées en les évaluant sur 4 métriques (Accuracy, f1 score, precision et recall).
 
 
 <figure >
@@ -223,14 +225,14 @@ Finalement c'est pour k=28 que les meilleurs résultats sont obtenus.
 
 <h3> 5.3.7 Comparaison des méthodes de séléctions</h3>
 
-Finalement, nous avons comparé toutes ces séléctions entre elles en utilisant le même paramétrage de modèle XGBoost suivant :
+Finalement, nous avons comparé toutes ces sélections entre elles en utilisant le même paramétrage de modèle XGBoost suivant :
 
 ```python
  model = XGBClassifier(scale_pos_weight = 4)
 ```
-Ce choix de paramétrage a été fait pour atténuer le débalancement des données. Suite à cette comparaison nous avons conclus que la meilleure sélection était tout simplement de prendre toutes les features sauf les redondantes, c'est à dire le 'last_event_type_Shot' dans notre cas.
+Ce choix de paramétrage a été fait pour atténuer le débalancement des données. Suite à cette comparaison nous avons conclu que la meilleure sélection était tout simplement de prendre toutes les features sauf les redondantes, c'est-à-dire le 'last_event_type_Shot' dans notre cas.
 
-Voici les figures comparant les résultats des séléctions de features.
+Voici les figures comparant les résultats des sélections de features.
 
 <table>
   <tr>
@@ -244,7 +246,8 @@ Voici les figures comparant les résultats des séléctions de features.
 </table>
 
 
-Tableau présentant les résultats des différentes sélèctions de caractériques selon différentes métriques.
+Tableau présentant les résultats des différentes sélections de caractéristiques selon différentes métriques.
+
 <figure >
     <img src="../assets/Part_2_Q5/q5_3/table_comparison.png" style="width:auto; margin:auto;">
 </figure>
@@ -257,7 +260,7 @@ NB:
 - fKBest : les 28 meilleurs features/caractéristiques en se basant sur le f_classif score (après suppression de redondances).
 
 
-On observe que les résultats entre toutes ces seléctions sont assez similaire. La séléction avec les valeurs Shap était peut être un peu brutal, il aurait fallut considérer un plus grand nombre de features peut être dans ce cas.
+On observe que les résultats entre toutes ces sélections sont assez similaires. La sélection avec les valeurs Shap était peut être un peu brutale, il aurait fallu considérer un plus grand nombre de features peut être dans ce cas.
 
 <h3> 5.3.8 Grid Search avec les meilleurs features/caractéristiques sélectionnées </h3>
 
@@ -309,7 +312,7 @@ Commentaire :
 
 Les résultats au niveau des courbes n'ont pas vraiment évolué et, cela parce que nous n'avons que supprimé une feature/caractéristique parmi toutes les autres. Toutefois, les résultats ont augmenté puisqu'on passe de 62.6% de AUC à 63.1% de AUC.
 
-NB: à noter que toutes les combinaisons des paramétres n'ont pas été testé, car on a réalisé un RandomSearch. Par conséquent une part de l'écart entre ces résultats peut provenir d'un meilleur paramétrage.
+NB: à noter que toutes les combinaisons des paramètres n'ont pas été testé, car on a réalisé un RandomSearch. Par conséquent, une part de l'écart entre ces résultats peut provenir d'un meilleur paramétrage.
 
 
 ## 7.2 La saison élimnatoire (Playoffs)
@@ -379,9 +382,9 @@ NB: à noter que toutes les combinaisons des paramétres n'ont pas été testé,
 
 On observe que pour la régression logistique, les résultats sont toujours les mêmes. On s'y attend car le modèle ne prédit que des "Shots" et aucun "Goals". 
 
-Pour les modèles de NN et de XGBoost on remarque qu'ils performent moins bien sur les playoffs. Notamment, le NN passe de 58,7% de f1 score sur la saison régulière à 51.7% de f1 score pour les playoffs. Le XGBoost est un peu plus robuste puisque qu'on a un écart de 4% entre la saison régulière et les playoffs (61.0% pour la saison réguliére et 57.3% pour les playoffs).
+Pour les modèles de NN et de XGBoost on remarque qu'ils performent moins bien sur les playoffs. Notamment, le NN passe de 58,7% de f1 score sur la saison régulière à 51.7% de f1 score pour les playoffs. Le XGBoost est un peu plus robuste puisqu'on a un écart de 4% entre la saison régulière et les playoffs (61.0% pour la saison régulière et 57.3% pour les playoffs).
 
-Cela se lit aussi sur les courbes Goal Rate, Cumulative %Goals et Calibration curves. Pour le XGboost ces courbes varient très peu entre les 2 saisons tandis que pour le NN les courbes ont beacoup plus changé. Notamment sur la courbe du Goal Rate on peut voir que la pente est beaucoup plus raide, les probabilités sont toujours centré plus ou moins autour de 0.8 mais avec un écart type beaucoup plus petit. Ce qui montre aussi que la confiance du modèle à distinguer les Shots des Goals est plus faible. Pour le NN, on aurait peut être besoin de définir un seuil différent pour la saison régulière et la saison des playoffs.
+Cela se lit aussi sur les courbes Goal Rate, Cumulative %Goals et Calibration curves. Pour le XGboost ces courbes varient très peu entre les 2 saisons tandis que pour le NN les courbes ont beaucoup plus changé. Notamment sur la courbe du Goal Rate on peut voir que la pente est beaucoup plus raide, les probabilités sont toujours centrées plus ou moins autour de 0.8 mais avec un écart type beaucoup plus petit. Ce qui montre aussi que la confiance du modèle à distinguer les Shots des Goals est plus faible. Pour le NN, on aurait peut être besoin de définir un seuil différent pour la saison régulière et la saison des playoffs.
 
 Cet écart de résultats entre les deux saisons peut être expliqué par la différence de style de jeu des joueurs et les stratégies que les équipes adoptent entre les playoffs et la saison régulière. 
 
@@ -389,7 +392,7 @@ En effet, premièrement, pendant les playoffs ce sont les meilleures équipes de
 
 On peut voir notamment sur les matrices de confusion ci-dessous, que le NN prédit 17.4% des tirs comme des buts pour les playoffs et seulement 7,6% pour la saison régulière. Ajuster le seuil spécifiquement pour les playoffs pourrait donner de meilleurs résultats.
 
-Nos modèles surraprennent les données de la saison régulière durant l'entrainement car il y en a plus et échoue à généraliser sur les données des playoffs. Finalement, en évaluant sur les deux ligues on observe que le NN et le XGB ne sont pas robustes sur les données du playoffs.
+Nos modèles sur-apprennent les données de la saison régulière durant l'entrainement car il y en a plus et échouent à généraliser sur les données des playoffs. Finalement, en évaluant sur les deux ligues on observe que le NN et le XGB ne sont pas robustes sur les données du playoffs.
 
 Stratifier les données en prenant en compte les saisons aurait pu aider.
 
@@ -411,4 +414,5 @@ Stratifier les données en prenant en compte les saisons aurait pu aider.
 </table>
 
 
-En conclusion, le modèle XGBoost reste le meilleur modèle car il donne à la fois les meilleurs résultats durant l'entrainement mais également durant les tests que ce soit durant la saison régulière ou les playoffs. Toutefois, on note que les résultats sont moins bon pour les playoffs car le modèle surapprend les données de la saison régulière.
+En conclusion, le modèle XGBoost reste le meilleur modèle car il donne à la fois les meilleurs résultats durant l'entraînement mais également durant les tests que ce soit durant la saison régulière ou les playoffs. Toutefois, on note que les résultats sont moins bons pour les playoffs car le modèle sur-apprend les données de la saison régulière.
+
