@@ -17,7 +17,8 @@ The actual dataset with the features engineered can be found on a google drive [
 ## Training models
 The actual training of the different models can be found in 3 differents notebooks: [Logistic Regression Q3](./notebooks/Part_2_Q.3.ipynb), [XGBoost Q5](./notebooks/Part_2_Q.5.ipynb) and [Neural Nets Q6](./notebooks/Part_2-Q6.ipynb)
 
-Function to preprocess the data and to send information to Comet such as Metrics, plots and models can be found in the [utils file](./ift6758/models/utils.py). 
+Functions to preprocess the data and to send information to Comet such as Metrics, plots and models can be found in the [utils file](./ift6758/models/utils.py). 
+Functions to plot all the 4 graphs can be found [here](./ift6758/models/plotter.py).
 
 ## Evaluating models
 The evaluation of the models and comparison of their performance has been done in a jupyter notebook: [Evaluation Q7](./notebooks/Part_2_Q.7.ipynb).
