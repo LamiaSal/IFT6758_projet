@@ -5,7 +5,7 @@ In the repository you'll find the work we've done through the whole project of t
 In this ***second part*** we had to create a Comet account, do features engineering, train models and evaluate our performance on a test set.
 
 ## Comet
-Jus the link to the [comet](https://www.comet.com/princesslove/itf-6758-team-4/view/new/panels).
+Jus the link to our [comet](https://www.comet.com/princesslove/itf-6758-team-4/view/new/panels).
 
 ## Features engineering
 The features enginneering was done in two jupyter notebooks [Features engineering for Q2](./notebooks/Part_2_Q.2.ipynb) and [Features engineering for Q4](./notebooks/Part-2_Q.4-tidy.ipynb)
