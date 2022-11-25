@@ -47,6 +47,9 @@ Cette figure répresente un histogramme de buts classés par distance et montre 
 La connaissance du domaine dit qu'« il est incroyablement rare de marquer un but net non vide sur l'équipe adverse depuis l'intérieur de votre zone défensive ».
 
 On peut se baser sur notre observation précédente sur les nets vides et non vides pour rechercher des données qui pourraient être incorrectes. On pourrait vérifier si un but a été marqué avec un net non-vide à une distance très éloignée.
+C'est le cas pour le match Detroit Red Wings - Florida Panthers on December,23 2016 qui correspond au but marqué à la distance la plus  éloignée avec un net non vide. En regardant la vidéo du match, on peut clairement voir que le but a été marqué à une distance proche du filet.
+
+https://www.nhl.com/gamecenter/det-vs-fla/2016/12/23/2016020510#game=2016020510,game_state=final
 
 
 
