@@ -58,6 +58,8 @@ Les courbes de calibration montre que le modèle XGboost est quasiment parfaitme
 
 <h1>5.2. XGboost paramétré avec toutes les features</h1>
 
+Modèle:[question 5.2](https://www.comet.com/princesslove/model-registry/question5-2-with-grid-search-json-model)
+
 Expérience: [question 5.2](https://www.comet.com/princesslove/itf-6758-team-4/93f37095918649eea592e37100e8f278?experiment-tab=chart&showOutliers=true&smoothing=0&transformY=smoothing&xAxis=wall)
 
 Commentaires :
@@ -145,7 +147,7 @@ Pour cette partie on a testé plusieurs techniques de sélection de features.
 
 <h3>5.3.1 Sélection avec Shap</h3>
 
-Expérience: [question 5.1](https://www.comet.com/princesslove/itf-6758-team-4/da3d1de95f164994a69ecd8be274747f?experiment-tab=chart&showOutliers=true&smoothing=0&transformY=smoothing&xAxis=wall)
+Expérience: [XGBoost avec Shap](https://www.comet.com/princesslove/itf-6758-team-4/173fd21ad5824b2897a136f2598e84d0?experiment-tab=chart&showOutliers=true&smoothing=0&transformY=smoothing&xAxis=wall)
 
 Tout d'abord nous avons évalué quelles features/caractéristiques étaient les plus importantes pour les prédictions du modèle XGBoost que nous avons paramétré plutôt. Pour cela, nous avons utilisé la librairy [SHAP](https://github.com/slundberg/shap).
 
@@ -170,6 +172,8 @@ Tout d'abord nous avons plot le heatmap des features pour observer et supprimer 
 Aprés cette première selection de features basé sur le heatmap nous avons testé différentes séléction de features. ***Pour chacune d'entre elles nous avons supprimé au préalable la redondance 'last_event_type_Shot'***.
 <h3> 5.3.3 Sélection de features basé sur la variance </h3>
 
+Expérience: [XGBoost avec Variance](https://www.comet.com/princesslove/itf-6758-team-4/c1fb955779bb423fa09e199aa81eb884?experiment-tab=chart&showOutliers=true&smoothing=0&transformY=smoothing&xAxis=wall)
+
 [VarianceThreshold](https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.VarianceThreshold.html) qui permet de supprimer toutes les features à faible variance.
   
 ```python 
@@ -179,6 +183,10 @@ selector = VarianceThreshold(threshold=0.95)
 Cette méthode conserve toutes les features dans notre cas.
 
 <h3> 5.3.4 Sélection de features basé sur le LASSO</h3>
+
+Expérience: [XGBoost avec Lasso](https://www.comet.com/princesslove/itf-6758-team-4/7e5f4b37f13740b484415676a5b7f507?experiment-tab=chart&showOutliers=true&smoothing=0&transformY=smoothing&xAxis=wall)
+
+
 Lasso that we computed using sklearn libraries [SelectModel](https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.SelectFromModel.html) and the model [LinearSVC](https://scikit-learn.org/stable/modules/generated/sklearn.svm.LinearSVC.html)
 
 Voici comment nous avons réalisé le LASSO : 
@@ -197,6 +205,10 @@ Le lasso supprime de sa sélection les features : 'periodTime','x_coord', 'angle
 On a pensé et essayer d'appliquer cette méthode mais elle est très couteuses en temps et nous avons donc abandonné l'idée.
 
 <h3>5.3.6 Sélection de features basé une métrique</h3>
+
+Expérience: [XGBoost avec fKBest](https://www.comet.com/princesslove/itf-6758-team-4/e167b9f118394c85a661d47d3c5b4b64?experiment-tab=chart&showOutliers=true&smoothing=0&transformY=smoothing&xAxis=wall)
+
+
 L'idée est de séléctionner les k best features en se basant sur la métirque [f_classif](https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.f_classif.html#sklearn.feature_selection.f_classif).
 
 Pour choisir le nombre k de features optimales nous les avons toutes testés en les évaluant sur 4 métriques (Accuracy, f1 score, precision et recall).
@@ -238,7 +250,7 @@ Tableau présentant les résultats des différentes sélèctions de caractériqu
 </figure>
 
 NB:
-- all_fts : toutes les features/caractéristiques sans exception (même les redondantes).
+- all_fts : toutes les features/caractéristiques sans exception (même les redondantes). (Experience : [XGBoost avec toutes les features](https://www.comet.com/princesslove/itf-6758-team-4/5a2d2a2cc121456389eecf91a5601723?experiment-tab=chart&showOutliers=true&smoothing=0&transformY=smoothing&xAxis=wall)
 - shap :  les features/caractéristiques selectionnées par analyse des SHAP values et avec suppression de redondances.
 - variance : features/caractéristiques selectionnées avec la méthode de la variance (après suppression de redondances). Dans notre cas cela revient à considéré toutes les features sauf les redondantes, cas la méthode de la variance ne fait aucune sélection.
 - lasso : features/caractéristiques selectionnées avec la méthode LASSO (après suppression de redondances).
@@ -248,6 +260,8 @@ NB:
 On observe que les résultats entre toutes ces seléctions sont assez similaire. La séléction avec les valeurs Shap était peut être un peu brutal, il aurait fallut considérer un plus grand nombre de features peut être dans ce cas.
 
 <h3> 5.3.8 Grid Search avec les meilleurs features/caractéristiques selectionnées </h3>
+
+Modèle:[question 5.3](https://www.comet.com/princesslove/model-registry/question5-3-grid-search-fts-selected-model)
 
 Expérience: [question 5.3](https://www.comet.com/princesslove/itf-6758-team-4/38505bd6308c472084e1f4d53f7d650a?experiment-tab=chart&showOutliers=true&smoothing=0&transformY=smoothing&xAxis=wall)
 
