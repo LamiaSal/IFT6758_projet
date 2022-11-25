@@ -15,8 +15,10 @@ An example of the features engineering can be found on comet: [example](https://
 ## Training models
 The actual training of the different models can be found in 3 differents notebooks: [Logistic Regression Q3](./notebooks/Part_2_Q.3.ipynb), [XGBoost Q5](./notebooks/Part_2_Q.5.ipynb) and [Neural Nets Q6](./notebooks/Part_2_Q.6.ipynb)
 
-Function to preprocess the data, send information to comet such as Metrics, plots and modeles can be found in the [utils file](./ift6758/models/utils.py). 
+Function to preprocess the data and to  send information to comet such as Metrics, plots and modeles can be found in the [utils file](./ift6758/models/utils.py). 
 
+## Evaluating models
+The evaluation of the models and comparaison of their performance as been done in a jupyter notebook: [Evaluation Q7](./notebooks/Part_2_Q.7.ipynb).
 
 # Milestone 1
 
