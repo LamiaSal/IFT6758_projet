@@ -8,12 +8,12 @@ In this ***second part*** we had to create a Comet account, do features engineer
 Jus the link to the [comet](https://www.comet.com/princesslove/itf-6758-team-4/view/new/panels).
 
 ## Features engineering
-The features enginneering was done in two jupyter notebooks [Features engineering for Q2](./notebooks/Part_2_Q.2.ipynb) and [Features engineering for Q4](./notebooks/Part_2_Q.4-tidy.ipynb)
+The features enginneering was done in two jupyter notebooks [Features engineering for Q2](./notebooks/Part_2_Q.2.ipynb) and [Features engineering for Q4](./notebooks/Part-2_Q.4-tidy.ipynb)
 
 ## Training models
 The actual training of the different models can be found in 3 differents notebooks: [Logistic Regression Q3](./notebooks/Part_2_Q.3.ipynb), [XGBoost Q5](./notebooks/Part_2_Q.5.ipynb) and [Neural Nets Q6](./notebooks/Part_2_Q.6.ipynb)
 
-Function to preprocess the data can be found in the [utils file](./ift6758/utils.py). 
+Function to preprocess the data, send information to comet such as Metrics, plots and modeles can be found in the [utils file](./ift6758/models/utils.py). 
 
 
 # Milestone 1
