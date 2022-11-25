@@ -6,8 +6,7 @@ title: Partie 2
 <h1>5. Modèles avancés </h1>
 <h1>5.1. XGboost avec comme features l'angle et la distance</h1>
 
-L'expèrience comet associé à cette question peut être trouvé au lien suivant : 
-[question 5.1](https://www.comet.com/princesslove/itf-6758-team-4/da3d1de95f164994a69ecd8be274747f?experiment-tab=chart&showOutliers=true&smoothing=0&transformY=smoothing&xAxis=wall)
+Expérience: [question 5.1](https://www.comet.com/princesslove/itf-6758-team-4/da3d1de95f164994a69ecd8be274747f?experiment-tab=chart&showOutliers=true&smoothing=0&transformY=smoothing&xAxis=wall)
 
 
 <table>
@@ -49,24 +48,22 @@ L'expèrience comet associé à cette question peut être trouvé au lien suivan
 </table>
 
 Commentaires : 
-Pour toutes les expériences nous avons diviseé nos données d'entrainements en données d'entrainements et de validations. Cela nous permet de configurer nos modèles tout en vérifiant que ces paramétres se généralisent à de nouvelles données, c'est à dire à nos données de test.
+Pour toutes les expériences nous avons divisé nos données d'entrainements en données d'entrainements et de validations. Cela nous permet de configurer nos modèles tout en nous laissant la possibilité de vérifer que ces paramétres se généralisent à de nouvelles données (ici nos données de test).
 
-Pour cette division nous avons défini unn seed commun à toutes les expériences pour pouvoir les comparer (seed fixé à 42) et on a également stratifié les données pour avoir la même répartition de label à "Goal" sur l'ensemble de données. En effet, les "Goals" étant minoritaires on veut qu'il y en ait assez dans l'ensemble d'entraiment pour que le modèle apprenne à les reconnaitre et on veut qu'il y en ait assez dans l'ensemble de validation pour avoir une évaluation pertinente.
+Pour cette division, nous avons défini un seed commun à toutes les expériences pour pouvoir les comparer (seed fixé à 42) et on a également stratifié les données pour avoir la même répartition de label à "Goal" sur l'ensemble de données. En effet, les "Goals" étant minoritaires on veut qu'il y en ait assez dans l'ensemble d'entraiment pour que le modèle apprenne à les reconnaitre et, on veut qu'il y en ait assez dans l'ensemble de validation pour avoir une évaluation pertinente.
 
-Finalement, on peut voir que juste avec ces 2 features (distance et angle) le XGBoost performe beaucoup mieux que la régression logistique puisqu'il parvient à prédire des Buts. 
+Finalement, on peut voir que, juste avec ces 2 features (distance et angle), le XGBoost performe mieux que la régression logistique puisqu'il parvient à prédire des Buts ('Goals'). 
 
 Les courbes de calibration montre que le modèle XGboost est quasiment parfaitment calibré. Tandis que, que les régressions logistques ne pouvaient pas être calibré puisqu'ils ne prédisaient que des tirs.
 
 <h1>5.2. XGboost paramétré avec toutes les features</h1>
 
-L'expèrience comet associé à cette question peut être trouvé au lien suivant : 
-[question 5.2](https://www.comet.com/princesslove/itf-6758-team-4/93f37095918649eea592e37100e8f278?experiment-tab=chart&showOutliers=true&smoothing=0&transformY=smoothing&xAxis=wall)
+Expérience: [question 5.2](https://www.comet.com/princesslove/itf-6758-team-4/93f37095918649eea592e37100e8f278?experiment-tab=chart&showOutliers=true&smoothing=0&transformY=smoothing&xAxis=wall)
 
 Commentaires :
 
-Dans votre article de blog, discutez de votre configuration de réglage des hyperparamètres et incluez des figures pour justifier votre choix d'hyperparamètres. Par exemple, vous pouvez sélectionner les métriques appropriées et effectuer une recherche par grille avec validation croisée.
+Pour le réglage d'hyperparamétres nous avons réalisé un random search avec un stratified 5-fold cross validation et 100 combinaisons testées. En tout, cela revient a pris 30-40 minutes pour un total de 500 fits. Le f1 score macro a été utilisé comme métrique pour a séléction des meilleurs hyperparamétres. Les paramétres testés sont les suivants :
 
-Pour le réglage d'hyperparamétres nous avons réalisé un random search de avec un stratified 5-fold cross validation et 100 combinaisons testées. En tout, cela revient a pris 30-40 minutes pour un total de 500 fits. Les paramétres testés sont les suivants :
 ```python
 param_grid = {'gamma': [0,0.1,0.2,0.4,0.8,1.6,3.2,6.4,12.8,25.6],
               'learning_rate': [0.01, 0.1, 0.2, 0.3, 0.5],
@@ -84,7 +81,7 @@ param_grid = {'gamma': [0,0.1,0.2,0.4,0.8,1.6,3.2,6.4,12.8,25.6],
             }
 
 ```
-Notamment nous avons remarqué que le paramétre 'scale_pos_weight' étant très determinant dans les performances du modèles. En effet, il permet de gérer l'imbalancement des données.
+Notamment nous avons remarqué que le paramètre 'scale_pos_weight' étant très determinant dans les performances du modèle. En effet, il permet de gérer le débalancement des données.
 
 avec 3 autres paramètres définis commut suit :
 ```python
@@ -93,7 +90,7 @@ model = XGBClassifier(objective='binary:logistic',
                         tree_method = 'hist')
 ```
 
-Nous avons défini la fonction objective comme celle par défaut pour une classification binaire, le paramétre predictor='cpu_predictor' permet un calcul plus rapide et de même pour tree_method = 'hist' qui permet de faire un binning jusqu'à un maximum de 255 bins sur les features continues.
+Nous avons défini la fonction objective comme celle par défaut pour une classification binaire, le paramètre predictor='cpu_predictor' permet un calcul plus rapide et de même pour tree_method = 'hist' qui permet de faire un binning jusqu'à un maximum de 255 bins sur les features continues.
 
 <table>
  <tr>
@@ -148,10 +145,9 @@ Pour cette partie on a testé plusieurs techniques de sélection de features.
 
 <h3>5.3.1 Sélection avec Shap</h3>
 
-L'expèrience comet associé à cette question peut être trouvé au lien suivant : 
-[question 5.1](https://www.comet.com/princesslove/itf-6758-team-4/da3d1de95f164994a69ecd8be274747f?experiment-tab=chart&showOutliers=true&smoothing=0&transformY=smoothing&xAxis=wall)
+Expérience: [question 5.1](https://www.comet.com/princesslove/itf-6758-team-4/da3d1de95f164994a69ecd8be274747f?experiment-tab=chart&showOutliers=true&smoothing=0&transformY=smoothing&xAxis=wall)
 
-Tout d'abord nous avons évalué quelles features étaient les plus importantes pour les prédictions du modèle XGBoost que nous avons paramétré plutôt. Pourr cela nous avons utilisé la librairy [SHAP](https://github.com/slundberg/shap).
+Tout d'abord nous avons évalué quelles features/caractéristiques étaient les plus importantes pour les prédictions du modèle XGBoost que nous avons paramétré plutôt. Pour cela, nous avons utilisé la librairy [SHAP](https://github.com/slundberg/shap).
 
 <table>
   <tr>
@@ -160,7 +156,7 @@ Tout d'abord nous avons évalué quelles features étaient les plus importantes 
   </tr>
 </table>
 
-Après avoir visualisé les features qui aident le plus notre modèle à prédire ce qu'on veut, on a décidé de ne sélectionner que les features donnant un score shape supéreieur à 0.02 (en valeur absolu).
+Après avoir visualisé les features qui aident le plus notre modèle, on a décidé de ne sélectionner que les features donnant un score shape supéreieur à 0.02 (en valeur absolu).
 
 <h3>5.3.2 Suppression des redondances avec une HeatMap</h3>
 
@@ -174,13 +170,13 @@ Tout d'abord nous avons plot le heatmap des features pour observer et supprimer 
 Aprés cette première selection de features basé sur le heatmap nous avons testé différentes séléction de features. ***Pour chacune d'entre elles nous avons supprimé au préalable la redondance 'last_event_type_Shot'***.
 <h3> 5.3.3 Sélection de features basé sur la variance </h3>
 
-[VarianceThreshold](https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.VarianceThreshold.html) qui est un selecteur qui supprime toutes les features à faible variance.
+[VarianceThreshold](https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.VarianceThreshold.html) qui permet de supprimer toutes les features à faible variance.
   
 ```python 
 selector = VarianceThreshold(threshold=0.95)
 ```
 
-Cette méthode conserve toutes les features.
+Cette méthode conserve toutes les features dans notre cas.
 
 <h3> 5.3.4 Sélection de features basé sur le LASSO</h3>
 Lasso that we computed using sklearn libraries [SelectModel](https://scikit-learn.org/stable/modules/generated/sklearn.feature_selection.SelectFromModel.html) and the model [LinearSVC](https://scikit-learn.org/stable/modules/generated/sklearn.svm.LinearSVC.html)
@@ -194,7 +190,7 @@ xgb_lasso = Pipeline([
 ])
 ```
 
-Le lasso supprimer de sa sélection les features : 'periodTime','x_coord', 'angle','last_x_coord', 'last_y_coord', 'angle_change' 'shot_type_Backhand','shot_type_Slap Shot', 'last_event_type_Blocked Shot', 'last_event_type_Missed Shot',
+Le lasso supprime de sa sélection les features : 'periodTime','x_coord', 'angle','last_x_coord', 'last_y_coord', 'angle_change' 'shot_type_Backhand','shot_type_Slap Shot', 'last_event_type_Blocked Shot', 'last_event_type_Missed Shot',
 
 <h3>5.3.5 Sélection de features basé sur le Seqential forward/backward</h3>
 
@@ -220,7 +216,7 @@ Finalement, nous avons comparé toutes ces séléctions entre elles en utilisant
 ```python
  model = XGBClassifier(scale_pos_weight = 4)
 ```
-Ce choix de paramétrage a été fait pour attenuer l'imbalancement des données. Suite à cette comparaison nous avons conclus que la meilleur sélection était tout simplement de prendre toutes les features sauf les redondantes, c'est à dire le 'last_event_type_Shot' dans notre cas.
+Ce choix de paramétrage a été fait pour attenuer le débalancement des données. Suite à cette comparaison nous avons conclus que la meilleur sélection était tout simplement de prendre toutes les features sauf les redondantes, c'est à dire le 'last_event_type_Shot' dans notre cas.
 
 Voici les figures comparant les résultats des séléctions de features.
 
@@ -236,24 +232,24 @@ Voici les figures comparant les résultats des séléctions de features.
 </table>
 
 
+Tableau présentant les résultats des différentes sélèctions de caractériques selon différentes métriques.
 <figure >
     <img src="../assets/Part_2_Q5/q5_3/table_comparison.png" style="width:auto; margin:auto;">
 </figure>
 
 NB:
-- all_fts : toutes les features sans exception (même les redondantes).
-- shap :  les features selectionnées par analyse des SHAP values et avec suppression de redondances.
-- variance : features selectionnées avec la méthode des variance (après suppression de redondances). Dans notre cas cela revient à considéré toutes les features sauf les redondantes, cas la méthode de la variance ne fait aucune sélection.
-- lasso : features selectionnées avec la méthode LASSO (après suppression de redondances).
-- fKBest : les 28 meilleurs features basé sur le f_classif score (après suppression de redondances).
+- all_fts : toutes les features/caractéristiques sans exception (même les redondantes).
+- shap :  les features/caractéristiques selectionnées par analyse des SHAP values et avec suppression de redondances.
+- variance : features/caractéristiques selectionnées avec la méthode de la variance (après suppression de redondances). Dans notre cas cela revient à considéré toutes les features sauf les redondantes, cas la méthode de la variance ne fait aucune sélection.
+- lasso : features/caractéristiques selectionnées avec la méthode LASSO (après suppression de redondances).
+- fKBest : les 28 meilleurs features/caractéristiques en se basant sur le f_classif score (après suppression de redondances).
 
 
 On observe que les résultats entre toutes ces seléctions sont assez similaire. La séléction avec les valeurs Shap était peut être un peu brutal, il aurait fallut considérer un plus grand nombre de features peut être dans ce cas.
 
-<h3> 5.3.8 Grid Search avec les meilleurs features selectionnés </h3>
+<h3> 5.3.8 Grid Search avec les meilleurs features/caractéristiques selectionnées </h3>
 
-L'expèrience comet associé à cette question peut être trouvé au lien suivant : 
-[question 5.3](https://www.comet.com/princesslove/itf-6758-team-4/38505bd6308c472084e1f4d53f7d650a?experiment-tab=chart&showOutliers=true&smoothing=0&transformY=smoothing&xAxis=wall)
+Expérience: [question 5.3](https://www.comet.com/princesslove/itf-6758-team-4/38505bd6308c472084e1f4d53f7d650a?experiment-tab=chart&showOutliers=true&smoothing=0&transformY=smoothing&xAxis=wall)
 
 <table>
  <tr>
@@ -297,7 +293,7 @@ L'expèrience comet associé à cette question peut être trouvé au lien suivan
 
 Commentaire :
 
-Les résultats au niveaux des courbes n'ont pas vraiment evolué et ce parce que nous n'avons que supprimer une features parmis toutes les autres. Toutefois, les résultats ont augmenté puisqu'on passe de 62.6% de AUC à 63.1% de AUC.
+Les résultats au niveau des courbes n'ont pas vraiment evolué et, cela parce que nous n'avons que supprimé une feature/caractéristique parmis toutes les autres. Toutefois, les résultats ont augmenté puisqu'on passe de 62.6% de AUC à 63.1% de AUC.
 
 NB: à noter que toutes les combinaisons des paramétres n'ont pas été testé, car on a réalisé un RandomSearch. Par conséquent une part de l'écart entre ces résultats peut provenir d'un meilleur paramétrage.
 
@@ -367,20 +363,21 @@ NB: à noter que toutes les combinaisons des paramétres n'ont pas été testé,
 
 ***Commentaire :***
 
-On observe que pour la régression logistique, les résultats sont toujours les mêmes. On s'y attend car le modèle ne prédit que des "Shots" et aucun "Goal". Par contre pour notre modèle neuronales on observe que 
+On observe que pour la régression logistique, les résultats sont toujours les mêmes. On s'y attend car le modèle ne prédit que des "Shots" et aucun "Goals". 
 
+Pour les modèles de NN et de XGBoost on remarque qu'ils perfoment moins bien sur les playoffs. Notamment, le NN passe the 58,7% de f1 score sur la saison réguliére à 51.7% de f1 score pour les playoffs. Le XGBoost est un peu plus robuste puisque qu'on a un écart de 4% entre la saison régulière et les playoffs (61.0% pour la saison réguliére et 57.3% pour les playoffs).
 
-Pour les modèles de NN et de XGBoost on remarque qu'ils perfoment moins bien sur les playoffs. Notamment le NN passe the 58,7% de f1 score sur la saison réguliére à 51.7% de f1 score pour les playoffs. Le XGBoost est un peu plus robuste puisque qu'on a un écart de 4% entre la saison régulière et les playoffs (61.0% pour la saison réguliére et 57.3% pour les playoffs).
-
-Cela se lit aussi sur les courbes Goal Rate, Cumulative %Goals et Calibration curves. Pour le XGboost ces courbes varient très peu entre les 2 saisons tandis que pour le NN les courbes ont beacoup plus changé. Notamment sur le la courbe du Goal Rate on peut voir que la pente est beaucoup plus raide, les probabilités sont toujours centré plus ou moins à 0.8 mais avec un écart type beaucoup plus petit. ce qui montre aussi que la confidence de modèle à distinguer les Shots des Goals est plus faible. Pour le NN, on aurait peut être besoin de définir un seuil différent pour la saison regulière et la saison des playoffs.
+Cela se lit aussi sur les courbes Goal Rate, Cumulative %Goals et Calibration curves. Pour le XGboost ces courbes varient très peu entre les 2 saisons tandis que pour le NN les courbes ont beacoup plus changé. Notamment sur la courbe du Goal Rate on peut voir que la pente est beaucoup plus raide, les probabilités sont toujours centré plus ou moins autour dee 0.8 mais avec un écart type beaucoup plus petit. ce qui montre aussi que la confiance du modèle à distinguer les Shots des Goals est plus faible. Pour le NN, on aurait peut être besoin de définir un seuil différent pour la saison regulière et la saison des playoffs.
 
 Cet écart de résultats entre les deux saisons peut être expliqué par la différence de style de jeu des joueurs et les stratégies que les équipes adoptent entre les playoffs et la saison reguliére. 
 
 En effet, premièrement, pendant les playoffs ce sont les meilleurs équipes de la saison reguliére qui jouent, donc les joueurs doivent constament bien se situer sur la glace. Secondement, comme les meilleurs joueurs sont sur la glace, les tirs se finalisent moins fréquemment en buts. La proportion de but/tir pour la saison reguliére est de 9,70% tandis que pour les playoffs celle-ci est de 9.09%. 
 
-On peut voir notamment sur les matrice de confusion ci dessous, que le NN prédit 17.4% des tirs comme des buts pour les playoffs et seulement 7,6% pour la saison reguliére. Ajuster le seuil pour les playoffs pour permettre de meilleurs résultats.
+On peut voir notamment sur les matrice de confusion ci-dessous, que le NN prédit 17.4% des tirs comme des buts pour les playoffs et seulement 7,6% pour la saison reguliére. Ajuster le seuil spécifiquement pour les playoffs pourrait permettre de meilleurs résultats.
 
-Ici nos modèles surraprennent les données de la saison reguliére durant l'entrainement car il y en a plus et échoue à généraliser sur les données des playoffs. Finalement, en évaluant sur les deux ligues on observe que le NN et le XGB ne sont pas robuste sur les données du playoffs.
+Nos modèles surraprennent les données de la saison reguliére durant l'entrainement car il y en a plus et échoue à généraliser sur les données des playoffs. Finalement, en évaluant sur les deux ligues on observe que le NN et le XGB ne sont pas robuste sur les données du playoffs.
+
+Stratifier les données en prenant en compte les saisons aurait pu aider.
 
 <table>
   <tr>
