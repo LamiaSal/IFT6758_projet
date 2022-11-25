@@ -18,7 +18,7 @@ The actual training of the different models can be found in 3 differents noteboo
 Function to preprocess the data and to  send information to comet such as Metrics, plots and modeles can be found in the [utils file](./ift6758/models/utils.py). 
 
 ## Evaluating models
-The evaluation of the models and comparaison of their performance as been done in a jupyter notebook: [Evaluation Q7](./notebooks/Part_2_Q.7.ipynb).
+The evaluation of the models and comparaison of their performance has been done in a jupyter notebook: [Evaluation Q7](./notebooks/Part_2_Q.7.ipynb).
 
 # Milestone 1
 
