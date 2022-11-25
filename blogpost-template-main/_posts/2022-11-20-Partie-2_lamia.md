@@ -47,14 +47,11 @@ Expérience: [question 5.1](https://www.comet.com/princesslove/itf-6758-team-4/d
   </tr>  
 </table>
 
-Commentaires : 
-Pour toutes les expériences nous avons divisé nos données d'entrainements en données d'entrainements et de validations. Cela nous permet de configurer nos modèles tout en nous laissant la possibilité de vérifer que ces paramétres se généralisent à de nouvelles données (ici nos données de test).
+Commentaires : Pour toutes les expériences nous avons divisé nos données d'entrainements en données d'entrainements et de validations. Cela nous permet de configurer nos modèles tout en nous laissant la possibilité de vérifier que ces paramètres se généralisent à de nouvelles données (ici nos données de test).
+Pour cette division, nous avons défini un seed commun à toutes les expériences pour pouvoir les comparer (seed fixé à 42) et on a également stratifié les données pour avoir la même répartition de label à "Goal" sur l'ensemble de données. En effet, les "Goals" étant minoritaires on veut qu'il y en ait assez dans l'ensemble d'entraînement pour que le modèle apprenne à les reconnaître et, on veut qu'il y en ait assez dans l'ensemble de validation pour avoir une évaluation pertinente.
+Finalement, on peut voir que, juste avec ces 2 features (distance et angle), le XGBoost performe mieux que la régression logistique puisqu'il parvient à prédire des buts ('Goals').
+Les courbes de calibration montrent que le modèle XGboost est quasiment parfaitement calibré. Tandis que, que les régressions logistiques ne pouvaient pas être calibrées puisqu'ils ne prédisaient que des tirs (non-buts).
 
-Pour cette division, nous avons défini un seed commun à toutes les expériences pour pouvoir les comparer (seed fixé à 42) et on a également stratifié les données pour avoir la même répartition de label à "Goal" sur l'ensemble de données. En effet, les "Goals" étant minoritaires on veut qu'il y en ait assez dans l'ensemble d'entraiment pour que le modèle apprenne à les reconnaitre et, on veut qu'il y en ait assez dans l'ensemble de validation pour avoir une évaluation pertinente.
-
-Finalement, on peut voir que, juste avec ces 2 features (distance et angle), le XGBoost performe mieux que la régression logistique puisqu'il parvient à prédire des Buts ('Goals'). 
-
-Les courbes de calibration montrent que le modèle XGboost est quasiment parfaitement calibré. Tandis que, que les régressions logistiques ne pouvaient pas être calibrés puisqu'ils ne prédisaient que des tirs (non-buts).
 
 <h1>5.2. XGboost paramétré avec toutes les features</h1>
 
