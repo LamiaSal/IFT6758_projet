@@ -2,7 +2,9 @@
 
 In the repository you'll find the work we've done through the whole project of the MILA course IFT6758. This project was divided in 3 parts.
 # Milestone 2
-In this ***second part*** we had to create a Comet account, do feature engineering, train modelsand evaluate our performance on a test set.
+In this ***second part*** we had to create a Comet account, do feature engineering, train models and evaluate our performance on a test set.
+
+The features enginneering was done in two jupyter notebooks [Feature enginerring for Q2](./notebook/Part_2_Q.2.ipynb) and [Feature engineering for Q4](./notebook/Part_2_Q.4-tidy.ipynb)
 
 
 # Milestone 1
