@@ -1,6 +1,11 @@
 # IFT6758 Repo Project
 
 In the repository you'll find the work we've done through the whole project of the MILA course IFT6758. This project was divided in 3 parts.
+# Milestone 2
+In this ***second part*** we had to create a Comet account, do feature engineering, train modelsand evaluate our performance on a test set.
+
+
+# Milestone 1
 
 ## Data wrangling and exploration
 In the ***first part*** we had to extract, tidy and visualize data of the LNH statistics API (https://gitlab.com/dword4/nhlapi). In this repository you'll find :
