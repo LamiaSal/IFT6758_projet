@@ -1,6 +1,30 @@
 # IFT6758 Repo Project
 
 In the repository you'll find the work we've done through the whole project of the MILA course IFT6758. This project was divided in 3 parts.
+# Milestone 2
+In this ***second part*** we had to create a Comet account, do features engineering, train models and evaluate our performance on a test set.
+
+## Comet
+Just the link to our [Comet](https://www.comet.com/princesslove/itf-6758-team-4/view/new/panels).
+
+## Features engineering
+The features engineering was done in two jupyter notebooks [Features engineering for Q2](./notebooks/Part_2_Q.2.ipynb) and [Features engineering for Q4](./notebooks/Part-2_Q.4-Tidy.ipynb).
+
+An example of the features engineering can be found on Comet: [example](https://www.comet.com/princesslove/itf-6758-team-4/2289a0e68c43462eafc910ef9f356de7?assetId=9d8cd18edbe747748e16edfdaa47d4b8&assetPath=dataframes&experiment-tab=assets). The code that generated this example can be found [here](./ift6758/tidying_data/milestone2_tidying_data.py).
+
+The actual dataset with the features engineered can be found on a google drive [here](https://drive.google.com/file/d/1kM__riNHRPx5GsyuOH3yhiql3OZvwmuP/view?usp=share_link).
+
+## Training models
+The actual training of the different models can be found in 3 differents notebooks: [Logistic Regression Q3](./notebooks/Part_2_Q.3.ipynb), [XGBoost Q5](./notebooks/Part_2_Q.5.ipynb) and [Neural Nets Q6](./notebooks/Part_2-Q6.ipynb)
+
+Functions to preprocess the data and to send information to Comet such as Metrics, plots and models can be found in the [utils file](./ift6758/models/utils.py). 
+
+Functions to plot the 4 graphs (ROC, Calibration, Goal percentile and Cumulative goal percentile) can be found [here](./ift6758/models/plotter.py).
+
+## Evaluating models
+The evaluation of the models and comparison of their performance has been done in a jupyter notebook: [Evaluation Q7](./notebooks/Part_2_Q.7.ipynb).
+
+# Milestone 1
 
 ## Data wrangling and exploration
 In the ***first part*** we had to extract, tidy and visualize data of the LNH statistics API (https://gitlab.com/dword4/nhlapi). In this repository you'll find :

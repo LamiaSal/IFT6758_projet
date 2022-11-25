@@ -54,7 +54,7 @@ Pour cette division, nous avons défini un seed commun à toutes les expérience
 
 Finalement, on peut voir que, juste avec ces 2 features (distance et angle), le XGBoost performe mieux que la régression logistique puisqu'il parvient à prédire des Buts ('Goals'). 
 
-Les courbes de calibration montre que le modèle XGboost est quasiment parfaitment calibré. Tandis que, que les régressions logistques ne pouvaient pas être calibré puisqu'ils ne prédisaient que des tirs.
+Les courbes de calibration montrent que le modèle XGboost est quasiment parfaitement calibré. Tandis que, que les régressions logistiques ne pouvaient pas être calibrés puisqu'ils ne prédisaient que des tirs (non-buts).
 
 <h1>5.2. XGboost paramétré avec toutes les features</h1>
 
@@ -64,7 +64,7 @@ Expérience: [question 5.2](https://www.comet.com/princesslove/itf-6758-team-4/9
 
 Commentaires :
 
-Pour le réglage d'hyperparamétres nous avons réalisé un random search avec un stratified 5-fold cross validation et 100 combinaisons testées. En tout, cela revient a pris 30-40 minutes pour un total de 500 fits. Le f1 score macro a été utilisé comme métrique pour a séléction des meilleurs hyperparamétres. Les paramétres testés sont les suivants :
+Pour le réglage d'hyperparamétres nous avons réalisé un random search avec un stratified 5-fold cross validation et 100 combinaisons testées. En tout, cela a pris 30-40 minutes pour un total de 500 fits. Le f1 score macro a été utilisé comme métrique pour la séléction des meilleurs hyperparamètres. Les paramètres testés sont les suivants :
 
 ```python
 param_grid = {'gamma': [0,0.1,0.2,0.4,0.8,1.6,3.2,6.4,12.8,25.6],
@@ -83,9 +83,9 @@ param_grid = {'gamma': [0,0.1,0.2,0.4,0.8,1.6,3.2,6.4,12.8,25.6],
             }
 
 ```
-Notamment nous avons remarqué que le paramètre 'scale_pos_weight' étant très determinant dans les performances du modèle. En effet, il permet de gérer le débalancement des données.
+Notamment nous avons remarqué que le paramètre 'scale_pos_weight' était très déterminant dans les performances du modèle. En effet, il permet de gérer le débalancement des données.
 
-avec 3 autres paramètres définis commut suit :
+avec 3 autres paramètres définis comme suit :
 ```python
 model = XGBClassifier(objective='binary:logistic',
                         predictor='cpu_predictor',
@@ -149,7 +149,7 @@ Pour cette partie on a testé plusieurs techniques de sélection de features.
 
 Expérience: [XGBoost avec Shap](https://www.comet.com/princesslove/itf-6758-team-4/173fd21ad5824b2897a136f2598e84d0?experiment-tab=chart&showOutliers=true&smoothing=0&transformY=smoothing&xAxis=wall)
 
-Tout d'abord nous avons évalué quelles features/caractéristiques étaient les plus importantes pour les prédictions du modèle XGBoost que nous avons paramétré plutôt. Pour cela, nous avons utilisé la librairy [SHAP](https://github.com/slundberg/shap).
+Tout d'abord nous avons évalué quelles features/caractéristiques étaient les plus importantes pour les prédictions du modèle XGBoost que nous avons paramétré plus tôt. Pour cela, nous avons utilisé la librairy [SHAP](https://github.com/slundberg/shap).
 
 <table>
   <tr>
@@ -158,7 +158,7 @@ Tout d'abord nous avons évalué quelles features/caractéristiques étaient les
   </tr>
 </table>
 
-Après avoir visualisé les features qui aident le plus notre modèle, on a décidé de ne sélectionner que les features donnant un score shape supéreieur à 0.02 (en valeur absolu).
+Après avoir visualisé les features qui aident le plus notre modèle, on a décidé de ne sélectionner que les features donnant un score shape supéreieur à 0.02 (en valeur absolue).
 
 <h3>5.3.2 Suppression des redondances avec une HeatMap</h3>
 
@@ -169,7 +169,7 @@ Tout d'abord nous avons plot le heatmap des features pour observer et supprimer 
 </figure>
 
 
-Aprés cette première selection de features basé sur le heatmap nous avons testé différentes séléction de features. ***Pour chacune d'entre elles nous avons supprimé au préalable la redondance 'last_event_type_Shot'***.
+Aprés cette première selection de features basé sur le heatmap nous avons testé différentes sélections de features. ***Pour chacune d'entre elles nous avons supprimé au préalable la redondance 'last_event_type_Shot'***.
 <h3> 5.3.3 Sélection de features basé sur la variance </h3>
 
 Expérience: [XGBoost avec Variance](https://www.comet.com/princesslove/itf-6758-team-4/c1fb955779bb423fa09e199aa81eb884?experiment-tab=chart&showOutliers=true&smoothing=0&transformY=smoothing&xAxis=wall)
@@ -200,9 +200,9 @@ xgb_lasso = Pipeline([
 
 Le lasso supprime de sa sélection les features : 'periodTime','x_coord', 'angle','last_x_coord', 'last_y_coord', 'angle_change' 'shot_type_Backhand','shot_type_Slap Shot', 'last_event_type_Blocked Shot', 'last_event_type_Missed Shot',
 
-<h3>5.3.5 Sélection de features basé sur le Seqential forward/backward</h3>
+<h3>5.3.5 Sélection de features basé sur le Sequential forward/backward</h3>
 
-On a pensé et essayer d'appliquer cette méthode mais elle est très couteuses en temps et nous avons donc abandonné l'idée.
+On a pensé et essayé d'appliquer cette méthode mais elle est très couteuse en temps et nous avons donc abandonné l'idée.
 
 <h3>5.3.6 Sélection de features basé une métrique</h3>
 
@@ -228,7 +228,7 @@ Finalement, nous avons comparé toutes ces séléctions entre elles en utilisant
 ```python
  model = XGBClassifier(scale_pos_weight = 4)
 ```
-Ce choix de paramétrage a été fait pour attenuer le débalancement des données. Suite à cette comparaison nous avons conclus que la meilleur sélection était tout simplement de prendre toutes les features sauf les redondantes, c'est à dire le 'last_event_type_Shot' dans notre cas.
+Ce choix de paramétrage a été fait pour atténuer le débalancement des données. Suite à cette comparaison nous avons conclus que la meilleure sélection était tout simplement de prendre toutes les features sauf les redondantes, c'est à dire le 'last_event_type_Shot' dans notre cas.
 
 Voici les figures comparant les résultats des séléctions de features.
 
@@ -252,14 +252,14 @@ Tableau présentant les résultats des différentes sélèctions de caractériqu
 NB:
 - all_fts : toutes les features/caractéristiques sans exception (même les redondantes). (Experience : [XGBoost avec toutes les features](https://www.comet.com/princesslove/itf-6758-team-4/5a2d2a2cc121456389eecf91a5601723?experiment-tab=chart&showOutliers=true&smoothing=0&transformY=smoothing&xAxis=wall)
 - shap :  les features/caractéristiques selectionnées par analyse des SHAP values et avec suppression de redondances.
-- variance : features/caractéristiques selectionnées avec la méthode de la variance (après suppression de redondances). Dans notre cas cela revient à considéré toutes les features sauf les redondantes, cas la méthode de la variance ne fait aucune sélection.
+- variance : features/caractéristiques selectionnées avec la méthode de la variance (après suppression de redondances). Dans notre cas, cela revient à considérer toutes les features sauf les redondantes, car la méthode de la variance ne fait aucune sélection.
 - lasso : features/caractéristiques selectionnées avec la méthode LASSO (après suppression de redondances).
 - fKBest : les 28 meilleurs features/caractéristiques en se basant sur le f_classif score (après suppression de redondances).
 
 
 On observe que les résultats entre toutes ces seléctions sont assez similaire. La séléction avec les valeurs Shap était peut être un peu brutal, il aurait fallut considérer un plus grand nombre de features peut être dans ce cas.
 
-<h3> 5.3.8 Grid Search avec les meilleurs features/caractéristiques selectionnées </h3>
+<h3> 5.3.8 Grid Search avec les meilleurs features/caractéristiques sélectionnées </h3>
 
 Modèle:[question 5.3](https://www.comet.com/princesslove/model-registry/question5-3-grid-search-fts-selected-model)
 
@@ -307,7 +307,7 @@ Expérience: [question 5.3](https://www.comet.com/princesslove/itf-6758-team-4/3
 
 Commentaire :
 
-Les résultats au niveau des courbes n'ont pas vraiment evolué et, cela parce que nous n'avons que supprimé une feature/caractéristique parmis toutes les autres. Toutefois, les résultats ont augmenté puisqu'on passe de 62.6% de AUC à 63.1% de AUC.
+Les résultats au niveau des courbes n'ont pas vraiment évolué et, cela parce que nous n'avons que supprimé une feature/caractéristique parmi toutes les autres. Toutefois, les résultats ont augmenté puisqu'on passe de 62.6% de AUC à 63.1% de AUC.
 
 NB: à noter que toutes les combinaisons des paramétres n'ont pas été testé, car on a réalisé un RandomSearch. Par conséquent une part de l'écart entre ces résultats peut provenir d'un meilleur paramétrage.
 
@@ -365,13 +365,13 @@ NB: à noter que toutes les combinaisons des paramétres n'ont pas été testé,
 </table>
 <table>
   <tr>
-  <td><img src="../assets/Part_2_Q7/Playoff/f2.png" alt="cheese pizza"></td> 
-    <td><img src="../assets/Part_2_Q7/Playoff/f1.png" alt="cheese pizza"></td>
+  <td><img src="../assets/Part_2_Q7/PlayOff/f2.png" alt="cheese pizza"></td> 
+    <td><img src="../assets/Part_2_Q7/PlayOff/f1.png" alt="cheese pizza"></td>
      
   </tr>
   <tr>
-    <td><img src="../assets/Part_2_Q7/Playoff/f3.png" alt="cheese pizza"></td>
-    <td><img src="../assets/Part_2_Q7/Playoff/f4.png" alt="cheese pizza"></td>   
+    <td><img src="../assets/Part_2_Q7/PlayOff/f3.png" alt="cheese pizza"></td>
+    <td><img src="../assets/Part_2_Q7/PlayOff/f4.png" alt="cheese pizza"></td>   
   </tr>  
 </table>
 
@@ -379,17 +379,17 @@ NB: à noter que toutes les combinaisons des paramétres n'ont pas été testé,
 
 On observe que pour la régression logistique, les résultats sont toujours les mêmes. On s'y attend car le modèle ne prédit que des "Shots" et aucun "Goals". 
 
-Pour les modèles de NN et de XGBoost on remarque qu'ils perfoment moins bien sur les playoffs. Notamment, le NN passe the 58,7% de f1 score sur la saison réguliére à 51.7% de f1 score pour les playoffs. Le XGBoost est un peu plus robuste puisque qu'on a un écart de 4% entre la saison régulière et les playoffs (61.0% pour la saison réguliére et 57.3% pour les playoffs).
+Pour les modèles de NN et de XGBoost on remarque qu'ils performent moins bien sur les playoffs. Notamment, le NN passe de 58,7% de f1 score sur la saison régulière à 51.7% de f1 score pour les playoffs. Le XGBoost est un peu plus robuste puisque qu'on a un écart de 4% entre la saison régulière et les playoffs (61.0% pour la saison réguliére et 57.3% pour les playoffs).
 
-Cela se lit aussi sur les courbes Goal Rate, Cumulative %Goals et Calibration curves. Pour le XGboost ces courbes varient très peu entre les 2 saisons tandis que pour le NN les courbes ont beacoup plus changé. Notamment sur la courbe du Goal Rate on peut voir que la pente est beaucoup plus raide, les probabilités sont toujours centré plus ou moins autour dee 0.8 mais avec un écart type beaucoup plus petit. ce qui montre aussi que la confiance du modèle à distinguer les Shots des Goals est plus faible. Pour le NN, on aurait peut être besoin de définir un seuil différent pour la saison regulière et la saison des playoffs.
+Cela se lit aussi sur les courbes Goal Rate, Cumulative %Goals et Calibration curves. Pour le XGboost ces courbes varient très peu entre les 2 saisons tandis que pour le NN les courbes ont beacoup plus changé. Notamment sur la courbe du Goal Rate on peut voir que la pente est beaucoup plus raide, les probabilités sont toujours centré plus ou moins autour de 0.8 mais avec un écart type beaucoup plus petit. Ce qui montre aussi que la confiance du modèle à distinguer les Shots des Goals est plus faible. Pour le NN, on aurait peut être besoin de définir un seuil différent pour la saison régulière et la saison des playoffs.
 
-Cet écart de résultats entre les deux saisons peut être expliqué par la différence de style de jeu des joueurs et les stratégies que les équipes adoptent entre les playoffs et la saison reguliére. 
+Cet écart de résultats entre les deux saisons peut être expliqué par la différence de style de jeu des joueurs et les stratégies que les équipes adoptent entre les playoffs et la saison régulière. 
 
-En effet, premièrement, pendant les playoffs ce sont les meilleurs équipes de la saison reguliére qui jouent, donc les joueurs doivent constament bien se situer sur la glace. Secondement, comme les meilleurs joueurs sont sur la glace, les tirs se finalisent moins fréquemment en buts. La proportion de but/tir pour la saison reguliére est de 9,70% tandis que pour les playoffs celle-ci est de 9.09%. 
+En effet, premièrement, pendant les playoffs ce sont les meilleures équipes de la saison régulière qui jouent, donc les joueurs doivent constamment bien se situer sur la glace. Secondement, comme les meilleurs joueurs sont sur la glace, les tirs se finalisent moins fréquemment en buts. La proportion de but/tir pour la saison régulière est de 9,70% tandis que pour les playoffs celle-ci est de 9.09%. 
 
-On peut voir notamment sur les matrice de confusion ci-dessous, que le NN prédit 17.4% des tirs comme des buts pour les playoffs et seulement 7,6% pour la saison reguliére. Ajuster le seuil spécifiquement pour les playoffs pourrait permettre de meilleurs résultats.
+On peut voir notamment sur les matrices de confusion ci-dessous, que le NN prédit 17.4% des tirs comme des buts pour les playoffs et seulement 7,6% pour la saison régulière. Ajuster le seuil spécifiquement pour les playoffs pourrait donner de meilleurs résultats.
 
-Nos modèles surraprennent les données de la saison reguliére durant l'entrainement car il y en a plus et échoue à généraliser sur les données des playoffs. Finalement, en évaluant sur les deux ligues on observe que le NN et le XGB ne sont pas robuste sur les données du playoffs.
+Nos modèles surraprennent les données de la saison régulière durant l'entrainement car il y en a plus et échoue à généraliser sur les données des playoffs. Finalement, en évaluant sur les deux ligues on observe que le NN et le XGB ne sont pas robustes sur les données du playoffs.
 
 Stratifier les données en prenant en compte les saisons aurait pu aider.
 
@@ -411,4 +411,4 @@ Stratifier les données en prenant en compte les saisons aurait pu aider.
 </table>
 
 
-En conclusion, le modèle XGBoost reste le meilleur modèle car il donne à la fois les meilleurs résultats durant l'entrainement mais également durant les tests que ce soit durant la saison réguliére ou les playoffs. Toutefois, on note que les résultats sont moins bon pour les playoffs car le modèle surapprend les données de la saison régulière.
+En conclusion, le modèle XGBoost reste le meilleur modèle car il donne à la fois les meilleurs résultats durant l'entrainement mais également durant les tests que ce soit durant la saison régulière ou les playoffs. Toutefois, on note que les résultats sont moins bon pour les playoffs car le modèle surapprend les données de la saison régulière.
