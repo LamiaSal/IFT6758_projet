@@ -12,7 +12,7 @@ The features engineering was done in two jupyter notebooks [Features engineering
 
 An example of the features engineering can be found on Comet: [example](https://www.comet.com/princesslove/itf-6758-team-4/2289a0e68c43462eafc910ef9f356de7?assetId=9d8cd18edbe747748e16edfdaa47d4b8&assetPath=dataframes&experiment-tab=assets). The code that generated this example can be found [here](./ift6758/tidying_data/milestone2_tidying_data.py).
 
-The actual dataset with the features engineered can be found on a google drive [here](https://drive.google.com/file/d/1kM__riNHRPx5GsyuOH3yhiql3OZvwmuP/view?usp=share_link)
+The actual dataset with the features engineered can be found on a google drive [here](https://drive.google.com/file/d/1kM__riNHRPx5GsyuOH3yhiql3OZvwmuP/view?usp=share_link).
 
 ## Training models
 The actual training of the different models can be found in 3 differents notebooks: [Logistic Regression Q3](./notebooks/Part_2_Q.3.ipynb), [XGBoost Q5](./notebooks/Part_2_Q.5.ipynb) and [Neural Nets Q6](./notebooks/Part_2_Q.6.ipynb)
