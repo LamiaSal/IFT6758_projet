@@ -2,9 +2,16 @@
 
 In the repository you'll find the work we've done through the whole project of the MILA course IFT6758. This project was divided in 3 parts.
 # Milestone 2
-In this ***second part*** we had to create a Comet account, do feature engineering, train models and evaluate our performance on a test set.
+In this ***second part*** we had to create a Comet account, do features engineering, train models and evaluate our performance on a test set.
 
-The features enginneering was done in two jupyter notebooks [Feature engineering for Q2](./notebooks/Part_2_Q.2.ipynb) and [Feature engineering for Q4](./notebooks/Part_2_Q.4-tidy.ipynb)
+## Comet
+Jus the link to the comet [comet](https://www.comet.com/princesslove/itf-6758-team-4/view/new/panels)
+
+## Features engineering
+The features enginneering was done in two jupyter notebooks [Features engineering for Q2](./notebooks/Part_2_Q.2.ipynb) and [Features engineering for Q4](./notebooks/Part_2_Q.4-tidy.ipynb)
+
+## Training models
+The actual training of the different models can be found in 3 differents notebooks: [Logistic Regression Q3](./notebooks/Part_2_Q.3.ipynb), [XGBoost Q5](./notebooks/Part_2_Q.5.ipynb) and [Neural Nets Q6](./notebooks/Part_2_Q.6.ipynb)
 
 
 # Milestone 1
