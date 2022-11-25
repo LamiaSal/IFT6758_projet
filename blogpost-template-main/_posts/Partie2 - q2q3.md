@@ -2,36 +2,30 @@
 
 ### 2.1 
 
-Dans cette partie, nous avons implémenté deux figures pour chaque question; la première figure montre une vue globale de l'histogramme et la seconde figure une vue rapprochée pour simplifier l'analyse.
-
-
 
 <figure>
-    <img src="../assets/Part_2_Q2/2.1/dist_binning_gen.png" style="width:auto; margin:auto;">
-    <img src="../assets/Part_2_Q2/2.1/dist_binning.png" style="width:auto; margin:auto;">
+    <img src="../assets/Part_2_Q2/2.1/binning_dist.png" style="width:auto; margin:auto;">
 </figure>
 
-Ces deux figures représentent un histogramme du nombre de tirs séparés en buts et non-buts, regroupés par distance. La vue rapprochée nous montre qu'il y a un plus grand nombre de buts pour pour les distances courtes. C'est également le cas pour le nombre de non-buts, qui sont plus élevés pour les distances courtes. De manière générale, nos données nous indiquent que plus on est proche du filet, plus le nombre de tirs (buts et non-buts) est élevé. 
+Cette figure représente un histogramme du nombre de tirs séparés en buts et non-buts, regroupés par distance. La figure nous montre qu'il y a un plus grand nombre de buts pour pour les distances courtes. C'est également le cas pour le nombre de non-buts, qui sont plus élevés pour les distances courtes. De manière générale, nos données nous indiquent que plus on est proche du filet, plus le nombre de tirs (buts et non-buts) est élevé. 
 
 <figure>
-    <img src="../assets/Part_2_Q2/2.1/angle_binning_gen.png" style="width:auto; margin:auto;">
-    <img src="../assets/Part_2_Q2/2.1/angle_binning.png" style="width:auto; margin:auto;">
+    <img src="../assets/Part_2_Q2/2.1/binning_angle.png" style="width:auto; margin:auto;">
 </figure>
 
-Ces deux figures représentent un histogramme du nombre de tirs séparés en buts et non-buts regroupés par angle. En observant notre histogramme, nous remarquons que le plus grand nombre de buts se trouve dans un intervalle d'angle de tir assez faible. Dans notre cas, 0° semble être le meilleur angle de tir pour avoir un but. En effet, les joueurs qui tirent plus ou moins droit (face au filet) ont une meilleure chance de marquer un but.
+Cette figure représente un histogramme du nombre de tirs séparés en buts et non-buts regroupés par angle. En observant notre histogramme, nous remarquons que le plus grand nombre de buts se trouve dans un intervalle d'angle de tir assez faible. Dans notre cas, 0° semble être le meilleur angle de tir pour avoir un but. En effet, les joueurs qui tirent plus ou moins droit (face au filet) ont une meilleure chance de marquer un but.
 
 <figure>
-    <img src="../assets/Part_2_Q2/2.1/2D_histogram_gen.png" style="width:auto; margin:auto;">
-    <img src="../assets/Part_2_Q2/2.1/2D_histogram.png" style="width:auto; margin:auto;">
+    <img src="../assets/Part_2_Q2/2.1/2D_histogramm.png" style="width:auto; margin:auto;">
 </figure>
 
-Ces deux figures représentent un histogramme 2D avec l'axe x (la distance) et l'axe y (l'angle). Dans cet histogramme, aucune séparation des tirs n'a été appliquée (buts et non-buts confondus). Cet histogramme en 2D nous permet d'analyser deux caractéristiques en même temps (distance, angle) et leur influence sur le nombre de tirs sans distinction de type. L'histogramme nous indique le plus grand nombre de tirs se fait près du filet (courte distance) et plus ou moins face au filet (angle proche de 0°).
+Cette figure représente un histogramme 2D avec l'axe x (la distance) et l'axe y (l'angle). Dans cet histogramme, aucune séparation des tirs n'a été appliquée (buts et non-buts confondus). Cet histogramme en 2D nous permet d'analyser deux caractéristiques en même temps (distance, angle) et leur influence sur le nombre de tirs sans distinction de type. L'histogramme nous indique le plus grand nombre de tirs se fait près du filet (courte distance) et plus ou moins face au filet (angle proche de 0°).
 
 
 ### 2.2 
 
 <figure >
-    <img src="../assets/Part_2_Q2/2.2/goal_rate_dist.png" style="width:auto; margin:auto;">
+    <img src="../assets/Part_2_Q2/2.2/goal_rate_distance.png" style="width:auto; margin:auto;">
 </figure>
 
 Cette figure montre la relation entre le taux de buts et la distance. Le taux de buts est plus élevé pour les courtes distances. Une fois de plus, on remarque que se tenir près du filet augmente la probabilité de marquer un but. 
@@ -45,13 +39,15 @@ Cette figure montre la relation entre le taux de buts et l'angle de tir. Le taux
 ### 2.3 
 
 <figure >
-    <img src="../assets/Part_2_Q2/2.3/gen_empty_net.png" style="width:auto; margin:auto;">
-    <img src="../assets/Part_2_Q2/2.3/closer_empty_net.png" style="width:auto; margin:auto;">
+    <img src="../assets/Part_2_Q2/2.3/empty_net_hist.png" style="width:auto; margin:auto;">
 </figure>
 
 Cette figure répresente un histogramme de buts classés par distance et montre la répartition des évènements nets vides et non-vides. La figure montre clairement qu'il y a beaucoup plus de buts avec filet non-vide lorsque la distance est courte. Il est donc plus compliqué de marquer un but avec filet non-vide (non-empty net) à une distance plus grande.  
 
 La connaissance du domaine dit qu'« il est incroyablement rare de marquer un but net non vide sur l'équipe adverse depuis l'intérieur de votre zone défensive ».
+
+On peut se baser sur notre observation précédente sur les nets vides et non vides pour rechercher des données qui pourraient être incorrectes. On pourrait vérifier si un but a été marqué avec un net non-vide à une distance très éloignée.
+
 
 
 <h1> 3. Modèles de base </h1>
@@ -75,7 +71,7 @@ On remarque que notre modèle donne toujours une prédiction de 0, et donc toujo
     <img src="../assets/Part_2_Q3/InclusiveFigs/ROC-all.png" style="width:auto; margin:auto;">
 </figure>
 
-Cette figure montre les courbes ROC pour les différents modèles.
+Cette figure montre les courbes ROC pour les différents modèles. On remarque que tous les modèles ont la même valeur de AUC et qu'il n'y a pas de distinction avec le model uniforme. 
 
 
 
@@ -89,13 +85,13 @@ Cette figure montre les courbes de calibration (calibration curve) pour les diff
     <img src="../assets/Part_2_Q3/InclusiveFigs/goal_rate.png" style="width:auto; margin:auto;">
 </figure>
 
-Cette figure montre les courbes de taux de buts (goal rate) pour les différents modèles.
+Cette figure montre les courbes de taux de buts (goal rate) pour les différents modèles. Vu que notre modèle de Logistic Regression donne de fausses prédictions, on constate que le taux de buts diminue pour des valeurs faibles de 'shot probability model percentile'.
 
 <figure>
     <img src="../assets/Part_2_Q3/InclusiveFigs/cumulative.png" style="width:auto; margin:auto;">
 </figure>
 
-Cette figure montre les courbes de proportion cumulée de buts pour les différents modèles.
+Cette figure montre les courbes de proportion cumulée de buts pour les différents modèles. Comme le modèle prédit toujours des non-buts, on en déduit que la figure ne nous apporte pas d'informations correctes.
 
 
 
