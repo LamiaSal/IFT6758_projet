@@ -64,7 +64,8 @@ Expérience: [question 5.2](https://www.comet.com/princesslove/itf-6758-team-4/9
 
 Commentaires :
 
-Pour le réglage d'hyperparamétres nous avons réalisé un random search avec un stratified 5-fold cross validation et 100 combinaisons testées. En tout, cela a pris 30-40 minutes pour un total de 500 fits. Le f1 score macro a été utilisé comme métrique pour la séléction des meilleurs hyperparamètres. Les paramètres testés sont les suivants :
+Pour le réglage d'hyper paramètres nous avons réalisé un random search avec un stratified 5-fold cross validation et 100 combinaisons testées. En tout, cela a pris 30-40 minutes pour un total de 500 fits. Le f1 score macro a été utilisé comme métrique pour la sélection des meilleurs hyperparamètres. Les paramètres testés sont les suivants :
+
 
 ```python
 param_grid = {'gamma': [0,0.1,0.2,0.4,0.8,1.6,3.2,6.4,12.8,25.6],
