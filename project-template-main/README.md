@@ -19,7 +19,7 @@ The actual training of the different models can be found in 3 differents noteboo
 
 Functions to preprocess the data and to send information to Comet such as Metrics, plots and models can be found in the [utils file](./ift6758/models/utils.py). 
 
-Functions to plot all the 4 graphs (ROC, Calibration, Goal percentile and Cumulative goal percentile) can be found [here](./ift6758/models/plotter.py).
+Functions to plot the 4 graphs (ROC, Calibration, Goal percentile and Cumulative goal percentile) can be found [here](./ift6758/models/plotter.py).
 
 ## Evaluating models
 The evaluation of the models and comparison of their performance has been done in a jupyter notebook: [Evaluation Q7](./notebooks/Part_2_Q.7.ipynb).
