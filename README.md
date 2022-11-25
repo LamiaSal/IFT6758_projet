@@ -4,7 +4,6 @@ Project of MILA course: IFT6758 (2022)
 ## Milestone 2
 
 ### 1. Suivi des expériences
-
 ### 2. Ingénierie des caractéristiques I 
 ### 3. Modèles de base 
 ### 4. Ingénierie des caractéristiques II
