@@ -15,7 +15,7 @@ An example of the features engineering can be found on Comet: [example](https://
 The actual dataset with the features engineered can be found on a google drive [here](https://drive.google.com/file/d/1kM__riNHRPx5GsyuOH3yhiql3OZvwmuP/view?usp=share_link).
 
 ## Training models
-The actual training of the different models can be found in 3 differents notebooks: [Logistic Regression Q3](./notebooks/Part_2_Q.3.ipynb), [XGBoost Q5](./notebooks/Part_2_Q.5.ipynb) and [Neural Nets Q6](./notebooks/Part_2_Q.6.ipynb)
+The actual training of the different models can be found in 3 differents notebooks: [Logistic Regression Q3](./notebooks/Part_2_Q.3.ipynb), [XGBoost Q5](./notebooks/Part_2_Q.5.ipynb) and [Neural Nets Q6](./notebooks/Part_2-Q.6.ipynb)
 
 Function to preprocess the data and to send information to Comet such as Metrics, plots and models can be found in the [utils file](./ift6758/models/utils.py). 
 
