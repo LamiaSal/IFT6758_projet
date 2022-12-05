@@ -33,7 +33,7 @@ def before_first_request():
     """
     # TODO: setup basic logging configuration
     logging.basicConfig(filename=LOG_FILE, level=logging.INFO)
-
+    
     # TODO: any other initialization before the first request (e.g. load default model)
     json_data = {
         'workspace': 'princesslove',
@@ -42,7 +42,7 @@ def before_first_request():
         'source_experiment' : 'question5.3_grid_search_fts_selected.json',
     }
 
-    response = download_model_with_exception(app,json_data)
+    response = download_model_with_exception(json_data)
 
     app.logger.info(response)
     download_registry_model()
@@ -78,7 +78,7 @@ def download_registry_model():
     app.logger.info(json_data)
 
     # TODO
-    response = download_model_with_exception(app,json_data)
+    response = download_model_with_exception(json_data)
 
     app.logger.info(response)
     return jsonify(response)  # response must be json serializable!
@@ -97,9 +97,9 @@ def predict():
     # TODO:
     try :
         model_xgb_without_RDS = XGBClassifier()
-        model_xgb_without_RDS.load_model(os.path.join("comet_models",json['source_experiment'],".json"))
+        model_xgb_without_RDS.load_model(os.path.join("comet_models",json_data['source_experiment'],".json"))
 
-        y_test_pred_XGB,y_test_prob_XGB = predict_model(model_xgb_without_RDS,pd.read_json(json_data, orient='split'))
+        y_test_pred_XGB,y_test_prob_XGB = predict_model(model_xgb_without_RDS,pd.read_json(json_data, orient='split').values)
     except Exception as e :
         print(e)
     response = None

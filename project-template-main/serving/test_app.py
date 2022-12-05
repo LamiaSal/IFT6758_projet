@@ -34,8 +34,11 @@ def get_input_features_df():
 
 if __name__ == "__main__":
     X, Y = get_input_features_df()
+    print(ift6758.__path__)
+    print("YOOOO")
     r = requests.post(
-        "http:// 0.0.0.0:8088/predict", 
+        "http://0.0.0.0:8088/predict", 
         json=json.loads(pd.DataFrame(X).to_json())
     )
+    print("YOOOO")
     print(r.json())

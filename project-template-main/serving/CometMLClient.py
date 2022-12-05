@@ -9,7 +9,7 @@ def download_model_with_exception(json):
 
     # input
     register_name = json['model']#'question5-3-grid-search-fts-selected-model' 
-    package_path = ift6758.__path__
+    package_path = ift6758.__path__[0]
     # boolean if the model you are querying for is already downloaded
     mode_downloaded = os.path.exists(os.path.join(package_path,'comet_models', register_name))
 
