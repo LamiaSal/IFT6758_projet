@@ -6,7 +6,6 @@ import pandas as pd
 
 def download_model_with_exception(json):
     # TODO regler le problemes des noms
-
     # input
     register_name = json['model']#'question5-3-grid-search-fts-selected-model' 
     package_path = ift6758.__path__[0]

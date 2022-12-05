@@ -38,7 +38,7 @@ if __name__ == "__main__":
     print("YOOOO")
     r = requests.post(
         "http://0.0.0.0:8088/predict", 
-        json=json.loads(pd.DataFrame(X).to_json())
+        json=json.loads(pd.DataFrame(X).to_json(orient="split"))
     )
     print("YOOOO")
     print(r.json())

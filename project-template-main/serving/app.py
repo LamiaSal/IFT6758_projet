@@ -45,7 +45,6 @@ def before_first_request():
     response = download_model_with_exception(json_data)
 
     app.logger.info(response)
-    download_registry_model()
 
 
 @app.route("/logs", methods=["GET"])
@@ -101,8 +100,11 @@ def predict():
 
         y_test_pred_XGB,y_test_prob_XGB = predict_model(model_xgb_without_RDS,pd.read_json(json_data, orient='split').values)
     except Exception as e :
-        print(e)
-    response = None
+        print('error in prediction',e)
+        y_test_pred_XGB = None
+        app.logger.info(e)
+    
+    response = y_test_pred_XGB
 
     app.logger.info(response)
     return jsonify(response)  # response must be json serializable!
