@@ -140,12 +140,12 @@ def save_metrics_and_models_on_comet(model,y_val,y_val_pred,y_val_prob,model_nam
     experiment.end()
 
 
-def download_model(register_name):
+def download_model(register_name, workspace = "princesslove",version = "1.0.0",output_path="../comet_models/"):
     load_dotenv()
     api = API()
     # Download a Registry Model:
-    api.download_registry_model("princesslove", f"{register_name}", "1.0.0",
-                                output_path="../comet_models/", expand=True)
+    api.download_registry_model(workspace, f"{register_name}", version,
+                                output_path=output_path, expand=True)
 
 def predict_model(model,X_val):
     # predict on validation set
