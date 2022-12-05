@@ -5,32 +5,31 @@ from ift6758.models.utils import download_model,preprocess
 import pandas as pd
 
 def download_model_with_exception(json):
-    # TODO regler le problemes des noms
     # input
-    register_name = json['model']#'question5-3-grid-search-fts-selected-model' 
-    package_path = ift6758.__path__[0]
-    # boolean if the model you are querying for is already downloaded
-    mode_downloaded = os.path.exists(os.path.join(package_path,'comet_models', register_name))
+    register_name = json['model'] #'question5-3-grid-search-fts-selected-model' 
+    package_path = os.path.abspath(os.path.join(ift6758.__path__[0], '..'))
 
-    if mode_downloaded :
-        # load that model
-        download_model(register_name, workspace = json['workspace'],version = json['version'],output_path=mode_downloaded)
-        # write to the log about the model change.  
-        info = f"model updated {json}"
-    else :
-        try : 
-            #try downloading the model:
-            download_model(register_name, workspace = json['workspace'],version = json['version'],output_path=mode_downloaded)
-            info = f"model downloaded {json}"
-        except Exception as e :
-            # write to the log about the failure
-            info = e
+    models_dir  = os.path.join(package_path,'comet_models', )
+    model_downloaded = os.path.join(models_dir, json['source_experiment'])
     
+    if os.path.exists(model_downloaded) :
+        info = f"model already downloaded"
+    else :
+        #try downloading the model:
+        try:
+            download_model(register_name, workspace = json['workspace'],version = json['version'],output_path=models_dir)
+            info = f"model downloaded"  
+        except:
+            info = f'failed to download model'  
+               
     return info
-    '''
-    experiment_name = 'question5.3_grid_search_fts_selected'
-    download_model(register_name = register_name )
+   
 
-    model_xgb_without_RDS = XGBClassifier()
-    model_xgb_without_RDS.load_model(os.path.join("comet_models",experiment_name,".json"))
-    '''
+if __name__ == "__main__":
+    json_data = {
+        'workspace': 'princesslove',
+        'model': 'question5-3-grid-search-fts-selected-model' ,
+        'version' : '1.0.0',
+        'source_experiment' : 'question5.3_grid_search_fts_selected.json',
+    }
+    download_model_with_exception(json_data)

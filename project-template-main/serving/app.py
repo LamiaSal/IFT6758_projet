@@ -23,6 +23,8 @@ LOG_FILE = os.environ.get("FLASK_LOG", "flask.log")
 
 
 app = Flask(__name__)
+logging.basicConfig(filename='flask.log',level=logging.INFO, format=f'%(asctime)s %(levelname)s %(name)s %(threadName)s : %(message)s')
+ 
 
 
 @app.before_first_request
@@ -52,9 +54,10 @@ def logs():
     """Reads data from the log file and returns them as the response"""
     
     # TODO: read the log file specified and return the data
-    raise NotImplementedError("TODO: implement this endpoint")
+    with open('flask.log') as f:
+        text = f.read()
 
-    response = None
+    response = text
     return jsonify(response)  # response must be json serializable!
 
 
@@ -83,6 +86,7 @@ def download_registry_model():
     return jsonify(response)  # response must be json serializable!
 
 
+
 @app.route("/predict", methods=["POST"])
 def predict():
     """
@@ -90,21 +94,33 @@ def predict():
     Returns predictions
     """
     # Get POST json data
-    json_data = request.get_json()
-    app.logger.info(json_data)
+    json_data = request.get_json()    
+   
+    package_path = os.path.abspath(os.path.join(ift6758.__path__[0], '..'))
 
-    # TODO:
-    try :
-        model_xgb_without_RDS = XGBClassifier()
-        model_xgb_without_RDS.load_model(os.path.join("comet_models",json_data['source_experiment'],".json"))
 
-        y_test_pred_XGB,y_test_prob_XGB = predict_model(model_xgb_without_RDS,pd.read_json(json_data, orient='split').values)
-    except Exception as e :
-        print('error in prediction',e)
-        y_test_pred_XGB = None
-        app.logger.info(e)
+    model = json_data['model']
+    models_dir  = os.path.join(package_path,'comet_models')
+
+    model_xgb_without_RDS = XGBClassifier()
+
+    if os.path.exists(os.path.join(models_dir,model)):
+        try :
+            model_xgb_without_RDS.load_model(os.path.join(models_dir,model))
+            data = json_data['data']
+            y_test_pred_XGB, _ = predict_model(model_xgb_without_RDS,data)
+            response = y_test_pred_XGB
+
+        except Exception as e :
+            print('error in prediction',e)
+            response = e
+            app.logger.info(e)
+    else:
+       message = "Model don't exists!" 
+       app.logger.info(message) 
+       response = message
     
-    response = y_test_pred_XGB
+    
 
     app.logger.info(response)
-    return jsonify(response)  # response must be json serializable!
+    return jsonify(response.tolist())  # response must be json serializable!

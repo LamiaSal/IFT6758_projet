@@ -3,13 +3,16 @@ import sys
 import os
 import ift6758
 from ift6758.models.utils import download_model,preprocess
+from CometMLClient import download_model_with_exception
 import pandas as pd
 import json
 import requests
+from ift6758.models.utils import preprocess, predict_model,download_model, compute_metrics
+from xgboost import XGBClassifier
 
 def get_input_features_df():
     
-    df_data = pd.read_csv('df_test.csv')
+    df_data = pd.read_csv('Datasets/df_test.csv')
 
     # question 5
     list_features = ['empty_net', 'periodTime','period', 'x_coord', 'y_coord','distance','angle','shot_type',\
@@ -33,12 +36,16 @@ def get_input_features_df():
     return X, Y
 
 if __name__ == "__main__":
+   
     X, Y = get_input_features_df()
-    print(ift6758.__path__)
-    print("YOOOO")
+    json_post = json.loads(pd.DataFrame(X).to_json(orient="split"))
+    json_post['model'] = 'question5.3_grid_search_fts_selected.json'
+
     r = requests.post(
-        "http://0.0.0.0:8088/predict", 
-        json=json.loads(pd.DataFrame(X).to_json(orient="split"))
+        "http://127.0.0.1:8088/predict", 
+        json=json_post
     )
-    print("YOOOO")
+    
+
     print(r.json())
+    print(f'Accuracy {(Y==r.json()).mean()*100:.4}%')
