@@ -48,7 +48,7 @@ class ServingClient:
     def logs(self) -> dict:
         """Get server logs"""
 
-        r = requests.post(f"{self.base_url}/log")  
+        r = requests.get(f"{self.base_url}/logs")  
 
         return r.json()
 
@@ -78,3 +78,28 @@ class ServingClient:
         )  
 
         return r.json() 
+if __name__ == "__main__":
+
+    df_data = pd.read_csv('Datasets/df_test.csv')
+
+    # question 5
+    list_features = ['empty_net', 'periodTime','period', 'x_coord', 'y_coord','distance','angle','shot_type',\
+        'last_event_type', 'last_x_coord', 'last_y_coord','distance_from_last', 'seconds_since_last', \
+            'rebound', 'angle_change','speed']
+
+
+    keep_fts = ['empty_net','periodTime','period','x_coord','y_coord','distance','angle',\
+    'last_x_coord','last_y_coord','distance_from_last','seconds_since_last',\
+    'rebound','angle_change','speed','shot_type_Backhand',\
+    'shot_type_Deflected','shot_type_Slap Shot','shot_type_Snap Shot',\
+    'shot_type_Tip-In','shot_type_Wrap-around','shot_type_Wrist Shot',\
+    'last_event_type_Blocked Shot','last_event_type_Faceoff',\
+    'last_event_type_Giveaway','last_event_type_Goal','last_event_type_Hit',\
+    'last_event_type_Missed Shot','last_event_type_Penalty',\
+    'last_event_type_Takeaway']
+
+    sc = ServingClient(features=list_features,keep_fts=keep_fts)
+
+    print(sc.predict(df_data))
+    print(sc.logs())
+    print(sc.download_registry_model(workspace='princesslove',model='question5-2-with-grid-search-json-model',version='1.0.0',source_experiment='question5.2-with-grid-search-json-model.json'))

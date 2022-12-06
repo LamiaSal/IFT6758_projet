@@ -114,7 +114,6 @@ def predict():
         except Exception as e :
             print('error in prediction',e)
             response = e
-            app.logger.info(e)
     else:
        message = "Model don't exists!" 
        app.logger.info(message) 
