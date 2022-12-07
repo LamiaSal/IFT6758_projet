@@ -39,7 +39,7 @@ class PlayerOnBench:
     def add_penalty(self,penalty):
         if self.penalty.add_penalty(penalty):
             self.penalties_types.append(penalty.type)
-            self.penalty.print_()
+            # self.penalty.print_()
         else:
             self.penalty = penalty
             self.penalties = [penalty.type]
@@ -58,8 +58,8 @@ class PlayerOnBench:
                     self.penalty.end = PERIOD_END - (t3 - self.penalty.end)
                 return False
         else:
-            print('\033[92m\nPenalty over because GOAL')
-            self.penalty.print_()
+            # print('\033[92m\nPenalty over because GOAL')
+            # self.penalty.print_()
             return True
                         
     def isOnBench(self,time,period):
@@ -90,7 +90,7 @@ class Penalty:
             self.period_ends = self.period_start + 1
             self.end = self.end - timedelta(minutes=20) 
         
-        self.print_()
+        # self.print_()
        
     def print_(self):
         print()
@@ -100,16 +100,16 @@ class Penalty:
         print()
         
     def add_penalty(self,new_penalty):
-        print(self.start,new_penalty.start)
+        # print(self.start,new_penalty.start)
         if (new_penalty.start - self.start).total_seconds()<15 :
-            print('Combine Penlaties')
+            # print('Combine Penlaties')
             self.end += timedelta(minutes=new_penalty.duration)
             
             if self.end > datetime.datetime.strptime("20:00", timeFormat):
                 self.period_ends = self.period_start + 1
                 self.end = self.end - timedelta(minutes=20) 
             return True
-        print('Dont combine')
+        # print('Dont combine')
         return False
     def time_left(self,periodTime,period):
         
@@ -154,10 +154,11 @@ def get_file_event_rows_data(data,type_season):
     
     for item in data['liveData']['plays']['allPlays']:
         if item['result']['event'] == 'Penalty':
-            print(f'\033[91m')
+            # print(f'\033[91m')
             p = Penalty(item)
             if p.type == "Misconduct":
-                print("Misconduct")
+                pass
+                # print("Misconduct")
             else:
                 playerIsOnBench = False
                 for player in playersOnBench:
@@ -200,16 +201,12 @@ def get_file_event_rows_data(data,type_season):
             isPenaltyOver = False
             for i in range(len(playersOnBench)-1,-1,-1):
                 if playersOnBench[i].isOnBench(periodTime,period):
-                    isPenalty = True
-#                     print(f'Penalty start:{playerOnBench.penalty.start}')
-#                     print(f'\033[91m    {periodTime} {period}')
-#                     print(f'Penalty end:{playerOnBench.penalty.end}')
-                    
+                    isPenalty = True                    
                 else:
-                    print('\033[92m\nPenalty over')
-                    print(periodTime)
+                    # print('\033[92m\nPenalty over')
+                    # print(periodTime)
                     isPenaltyOver = True
-                    playersOnBench[i].penalty.print_()
+                    # playersOnBench[i].penalty.print_()
                     if playersOnBench[i].team == team_away_name:
                         nb_player_away += 1
                     else:
@@ -219,7 +216,7 @@ def get_file_event_rows_data(data,type_season):
             powerPlay = 0      
              
             if isPenalty or isPenaltyOver:
-                print(f'Home Team {nb_player_home} vs {nb_player_away}')
+                # print(f'Home Team {nb_player_home} vs {nb_player_away}')
                 if name_team_that_shot == team_away_name:
                     current_team_nb = nb_player_away
                     other_team_nb = nb_player_home
@@ -227,7 +224,7 @@ def get_file_event_rows_data(data,type_season):
                     current_team_nb = nb_player_home
                     other_team_nb = nb_player_away
                 if current_team_nb > other_team_nb:
-                    print(f'Power Play')
+                    # print(f'Power Play')
                     powerPlay = 1
                     if result_event == "Goal":
                         idx = -1
@@ -245,18 +242,18 @@ def get_file_event_rows_data(data,type_season):
                                 else:
                                     nb_player_home += 1
                                 playersOnBench.pop(idx)
-                                print(f'Home Team {nb_player_home} vs {nb_player_away}')
+                                # print(f'Home Team {nb_player_home} vs {nb_player_away}')
                             
             
            
             
             if result_event == "Goal":
-                print('Goal!')
+                # print('Goal!')
                 if name_team_that_shot == team_away_name:
                     score[1]+=1
                 else:
                     score[0]+=1
-                print(f'Home {score[0]}:{score[1]} Away')
+                # print(f'Home {score[0]}:{score[1]} Away')
             # the rinkside of the the_team_that_shot
             
             try : 
@@ -300,22 +297,7 @@ def get_file_event_rows_data(data,type_season):
                 distance_from_net = None
                 angle = None
 
-            # the shooter and goalie name
-            goalie_name = None
-            shooter_name = None
-            for item_bis in item['players']:
-                if item_bis['playerType']=="Goalie":
-                    goalie_name = item_bis['player']["fullName"]
-                elif item_bis['playerType'] in ["Shooter", "Scorer"]:
-                    shooter_name = item_bis['player']["fullName"]
-                else:
-                    continue
-            '''
-            if goalie_name == None :
-                print(f"goalie_name not found for match {match_data[-7]} and event {event_Idx}")
-            if shooter_name == None :
-                print(f"shooter_name  not found for match {match_data[-7]} and event {event_Idx}")
-            '''
+           
             # shot type
             try :
                 shot_type = item['result']['secondaryType']
