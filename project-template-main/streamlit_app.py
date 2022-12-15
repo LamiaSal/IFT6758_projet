@@ -23,9 +23,15 @@ st.title("NHL goal predictor")
 game = None
 r= None
 SG = ServingGame('')
+
 with st.sidebar:
     # TODO: Add input for the sidebar
-    pass
+    pick_workspace = st.text_input('Workspace:', 'princesslove')
+    pick_model = st.text_input('Model', 'question5-3-grid-search-fts-selected-model')
+    pick_version = st.text_input('Version:', '1.0.0')
+    
+    download = st.button('Get Model')   
+
 
 with st.container():
     # TODO: Add Game ID input
@@ -84,4 +90,3 @@ with st.container():
 with st.container():
     # TODO: Add data used for predictions
     pass
-
