@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import requests,json
 from ift6758.client.serving_game import ServingGame
+from ift6758.client.serving_client import ServingClient
 from ift6758.models.utils import preprocess
 list_features = ['empty_net', 'periodTime','period', 'x_coord', 'y_coord','distance','angle','shot_type',\
         'last_event_type', 'last_x_coord', 'last_y_coord','distance_from_last', 'seconds_since_last', \
@@ -23,6 +24,7 @@ st.title("NHL goal predictor")
 game = None
 r= None
 SG = ServingGame('')
+SC = ServingClient(features=list_features, keep_fts=keep_fts)
 
 with st.sidebar:
     # TODO: Add input for the sidebar
@@ -30,7 +32,15 @@ with st.sidebar:
     pick_model = st.text_input('Model', 'question5-3-grid-search-fts-selected-model')
     pick_version = st.text_input('Version:', '1.0.0')
     
-    download = st.button('Get Model')   
+    # TODO: src experiment to be removed
+    src_exp = 'question5.3_grid_search_fts_selected.json' 
+
+
+    download = st.button('Get Model')
+
+    if download :
+        SC.download_registry_model(workspace=pick_workspace, model=pick_model, version=pick_version, source_experiment=src_exp)
+
 
 
 with st.container():
