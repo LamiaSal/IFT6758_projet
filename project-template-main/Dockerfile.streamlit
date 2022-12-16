@@ -14,6 +14,12 @@ FROM python:3.7
 # Create and cd into /code as your working directory
 WORKDIR /code
 
+COPY . .
+
+RUN pip install -r requirements.txt
+RUN pip install -e .
+
+ENTRYPOINT ["streamlit", "run", "streamlit_app.py", "--server.port=8501", "--server.address=127.0.0.1"]
 
 # The main docker commands you will find useful:
 # 
@@ -49,6 +55,9 @@ WORKDIR /code
 
 # TODO: install libs
 
+
+
+ENV COMET_API_KEY = 'j5seGneW8AFUgca6kWUsKRwXa'
 
 # TODO: expose ports (or do this in docker-compose)
 
