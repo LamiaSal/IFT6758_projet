@@ -49,15 +49,15 @@ def preprocess(df, features,standarize=False, drop_fts = [], keep_fts = []):
     
     # fill strength nan by 0 values
     df_proc["strength"].fillna(0.0,inplace=True)
-    df_proc = df_proc.dropna()
-    df_proc_flag = df_proc.copy()
-
-    # define Y (the target)
-    Y = df_proc['result_event']
-
     
     # Select features
-    df_proc = df_proc[features]
+    df_proc = df_proc[[*features,*['name_team_that_shot'], *['result_event']]]
+    df_proc = df_proc.dropna()
+    
+    # define Y (the target)
+    Y = df_proc['result_event']
+    df_proc = df_proc.drop(['result_event'], axis = 1)
+    
 
     # convert periodTime in seconds
     if 'periodTime' in features:
@@ -84,6 +84,8 @@ def preprocess(df, features,standarize=False, drop_fts = [], keep_fts = []):
             if event_type not in df_proc.columns :
                 df_proc[event_type]=0
     
+
+    df_proc_flag = df_proc.copy()
     order_selected_fts = [ft for ft in COlUMNS_ORDER if ft in df_proc.columns]
     df_proc = df_proc[order_selected_fts]
 

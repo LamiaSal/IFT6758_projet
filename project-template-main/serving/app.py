@@ -96,8 +96,7 @@ def predict():
     # Get POST json data
     json_data = request.get_json()    
    
-    package_path = os.path.abspath(os.path.join(ift6758.__path__[0], '..'))
-
+    package_path = os.path.abspath(os.path.dirname(os.path.join(ift6758.__path__[0]))) 
 
     model = json_data['model']
     models_dir  = os.path.join(package_path,'comet_models')
@@ -108,11 +107,11 @@ def predict():
         try :
             model_xgb_without_RDS.load_model(os.path.join(models_dir,model))
             data = json_data['data']
-            y_test_pred_XGB, _ = predict_model(model_xgb_without_RDS,data)
-            response = y_test_pred_XGB
+            y_test_pred_XGB, y_test_pred_XGB_proba = predict_model(model_xgb_without_RDS,data)
+            response = [y_test_pred_XGB.tolist(),y_test_pred_XGB_proba.tolist()]
+            
 
         except Exception as e :
-            print('error in prediction',e)
             response = e
     else:
        message = "Model don't exists!" 
@@ -122,4 +121,4 @@ def predict():
     
 
     app.logger.info(response)
-    return jsonify(response.tolist())  # response must be json serializable!
+    return jsonify(response)  # response must be json serializable!
