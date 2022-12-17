@@ -28,6 +28,7 @@ r= None
 SG = ServingGame('streamingGames')
 SC = ServingClient(features=list_features, keep_fts=keep_fts)
 
+
 with st.sidebar:
     # TODO: Add input for the sidebar
     pick_workspace = st.sidebar.selectbox(
@@ -120,6 +121,7 @@ with st.container():
             error_message = "error in the computation of predicted and true number of goals per team"
     
 
+
 with st.container():
     
     # TODO: Add Game info and predictions
@@ -132,10 +134,10 @@ with st.container():
             st.subheader(f'{team_home} vs {team_away}')
             st.text(f'perdiod A FAIRE - A FAIRE left')
             #st.text(f'{team_away} {predict_goals[1]}({goals[1]})')
-
-            st.metric(label=f'{team_home} xG (actual)', value=f'{predict_goals[0]}({goals[0]})', delta=f'{predict_goals[0]-goals[0]}',
+            c1, c2 = st.columns(2)
+            c1.metric(label=f'{team_home} xG (actual)', value=f'{predict_goals[0]}({goals[0]})', delta=f'{predict_goals[0]-goals[0]}',
             delta_color="off")
-            st.metric(label=f'{team_away} xG (actual)', value=f'{predict_goals[1]}({goals[1]})', delta=f'{predict_goals[1]-goals[1]}',
+            c2.metric(label=f'{team_away} xG (actual)', value=f'{predict_goals[1]}({goals[1]})', delta=f'{predict_goals[1]-goals[1]}',
             delta_color="off")
             
             df = pd.DataFrame(X,columns=df_preprocessed.columns)
