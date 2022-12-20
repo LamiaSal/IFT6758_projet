@@ -43,7 +43,8 @@ class ServingGame():
 
 if __name__ =='__main__':
     sg = ServingGame('streamingGames')
-    df = sg.getGame(2021020329)
+    df ,isLive= sg.getGame(2022020486)
+    print("Is Live:",isLive)
     print(df.head())
 
     

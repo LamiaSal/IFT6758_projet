@@ -9,7 +9,7 @@
 # https://docs.docker.com/engine/reference/builder/#from
 # You shouldn't need to change this
 FROM python:3.7
-
+ARG COMET_API_KEY
 # https://docs.docker.com/engine/reference/builder/#workdir
 # Create and cd into /code as your working directory
 WORKDIR /code
@@ -45,16 +45,25 @@ WORKDIR /code
 
 
 # TODO: add code, optionally a default model if you want 
+ADD ./comet_models/question5.3_grid_search_fts_selected.json ./comet_models/
 ADD ./ift6758/ ./ift6758/
+ADD ./serving .
 ADD ./setup.py ./setup.py
 ADD ./requirements.txt ./requirements.txt
 # TODO: install libs
 RUN pip3 install -r requirements.txt
 RUN pip3 install -e .
 
-ENV COMET_API_KEY = 'j5seGneW8AFUgca6kWUsKRwXa'
-# TODO: expose ports (or do this in docker-compose)
+ENV COMET_API_KEY=$COMET_API_KEY
+RUN pip3 install python-dotenv
 
+RUN pip3 install gunicorn
+
+CMD gunicorn --bind 127.0.0.1:8088 --timeout 30 app:app
+
+
+# TODO: expose ports (or do this in docker-compose)
+EXPOSE 8088
 
 # TODO: specify default command - this is not required because you can always specify the command
 # either with the docker run command or in the docker-compose file

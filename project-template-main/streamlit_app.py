@@ -2,6 +2,8 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import requests,json
+import datetime
+
 from ift6758.client.serving_game import ServingGame
 from ift6758.client.serving_client import ServingClient
 from ift6758.models.utils import preprocess
@@ -40,7 +42,8 @@ with st.sidebar:
         'Model',
         ('XGboost without features selection',
         'XGboost with features selection'
-        )
+        ),
+        index=1
     )
 
      # TODO: src experiment to be removed
@@ -74,15 +77,21 @@ with st.container():
 
 
     try :
-        game = SG.getGame(game_id)
+        game,isLive = SG.getGame(game_id)
         team_home = game["team_home_name"].iloc[0]
         team_away = game["team_away_name"].iloc[0]
+        if isLive:
+            livePeriod = game['period'].max()
+            timeFormat = "%M:%S"
+            PERIOD_END = datetime.datetime.strptime("20:00", timeFormat)
+            liveTimeLeft = PERIOD_END - datetime.datetime.strptime(game[game['period']==livePeriod]['periodTime'].max(),timeFormat)
     except Exception as e :
         error = True
         error_message = "the game was not found"
     
     goals = [0,0]
     predict_goals = [0,0]
+    proba_goals = [0.0,0.0]
     if not error :
         try :
             X,Y,df_preprocessed,df_proc_flag = preprocess(game,features = list_features, standarize=True,keep_fts = keep_fts)
@@ -92,14 +101,14 @@ with st.container():
     if not error :
         try :
             json_post = json.loads(pd.DataFrame(X).to_json(orient="split"))
-            json_post['model'] = 'question5.3_grid_search_fts_selected.json'
+            json_post['model'] = src_exp
             r = requests.post(
                 "http://127.0.0.1:8088/predict", 
                 json=json_post
             )
         except Exception as e :
             error = True
-            error_message = "the prediction failed"
+            error_message = e
     if not error :
         try :
             for (index, row ) in game.iterrows():
@@ -109,12 +118,17 @@ with st.container():
                     else:
                         goals[1]+=1
             
-            for (index, row ), y in zip(df_proc_flag.iterrows(), r.json()[0]):
+            for (index, row ), y,proba in zip(df_proc_flag.iterrows(), r.json()[0],r.json()[1]):
+                
                 if y == 1:
                     if row['name_team_that_shot'] == team_home:
                         predict_goals[0]+=1
                     else:
                         predict_goals[1]+=1
+                if row['name_team_that_shot'] == team_home:
+                    proba_goals[0] += proba
+                else:
+                    proba_goals[1] += proba
 
         except Exception as e :
             error = True
@@ -126,18 +140,21 @@ with st.container():
     
     # TODO: Add Game info and predictions
     if not error :
-        if st.button('Predict Game'):
+        if st.button('Ping Game'):
             st.subheader(f'Game {game_id}:')
             team_away = game["team_away_name"].iloc[0]
             if (team_home == "Montréal Canadiens") or (team_away == "Canadiens") :
                 st.balloons()
             st.subheader(f'{team_home} vs {team_away}')
-            st.text(f'perdiod A FAIRE - A FAIRE left')
-            #st.text(f'{team_away} {predict_goals[1]}({goals[1]})')
+            if isLive:
+                st.text(f'Live Game')
+               
+                st.text(f'Period {livePeriod}- Time left {liveTimeLeft.strftime(timeFormat)}')
+            
             c1, c2 = st.columns(2)
-            c1.metric(label=f'{team_home} xG (actual)', value=f'{predict_goals[0]}({goals[0]})', delta=f'{predict_goals[0]-goals[0]}',
+            c1.metric(label=f'{team_home} xG (actual)', value=f'{predict_goals[0]:.1f}({goals[0]})', delta=f'{predict_goals[0]-goals[0]:.1f}',
             delta_color="off")
-            c2.metric(label=f'{team_away} xG (actual)', value=f'{predict_goals[1]}({goals[1]})', delta=f'{predict_goals[1]-goals[1]}',
+            c2.metric(label=f'{team_away} xG (actual)', value=f'{predict_goals[1]:.1f}({goals[1]})', delta=f'{predict_goals[1]-goals[1]:.1f}',
             delta_color="off")
             
             df = pd.DataFrame(X,columns=df_preprocessed.columns)
@@ -150,6 +167,4 @@ with st.container():
     else :
         st.text(error_message)
     
-with st.container():
-    # TODO: Add data used for predictions
-    pass
+

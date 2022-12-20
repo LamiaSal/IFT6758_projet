@@ -12,7 +12,7 @@ from xgboost import XGBClassifier
 
 def get_input_features_df():
     
-    df_data = pd.read_csv('df_test.csv')
+    df_data = pd.read_csv('Datasets/df_test.csv')
 
     # question 5
     list_features = ['empty_net', 'periodTime','period', 'x_coord', 'y_coord','distance','angle','shot_type',\

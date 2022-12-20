@@ -392,7 +392,7 @@ def get_game_events(file_name_path,type_season)->pd.DataFrame:
         
         if 'messageNumber' in data and data['messageNumber'] == 2:
             return 'error'
-            
+        isLive =  data['gameData']['status']['abstractGameState']=='Live'
         all_list_data = get_file_event_rows_data(data,type_season)
 
 
@@ -401,4 +401,4 @@ def get_game_events(file_name_path,type_season)->pd.DataFrame:
             "shot_type","empty_net","strength","last_event_type","last_x_coord","last_y_coord","distance_from_last","seconds_since_last","rebound","angle_change","speed",'powerplay','team_that_shot_nb','other_team_nb',\
             "type_season","id_game","season","team_away_name","team_home_name"]
     df = pd.DataFrame(all_list_data, columns=columns_name)
-    return df
+    return df,isLive
