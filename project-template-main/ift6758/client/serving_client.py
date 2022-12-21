@@ -2,7 +2,7 @@ import json
 import requests
 import pandas as pd
 import logging
-from ift6758.models.utils import preprocess
+
 
 
 logger = logging.getLogger(__name__)
@@ -20,7 +20,7 @@ class ServingClient:
 
         # any other potential initialization
 
-    def predict(self, X: pd.DataFrame) -> pd.DataFrame:
+    def predict(self, X: pd.DataFrame,model:str) -> pd.DataFrame:
         """
         Formats the inputs into an appropriate payload for a POST request, and queries the
         prediction service. Retrieves the response from the server, and processes it back into a
@@ -30,18 +30,15 @@ class ServingClient:
             X (Dataframe): Input dataframe to submit to the prediction service.
         """
 
-        # preprocess
-        X, _,_,_ =  preprocess(X,features = self.features, standarize=True, keep_fts = self.keep_fts)
-
         json_post = json.loads(pd.DataFrame(X).to_json(orient="split"))
-        json_post['model'] = 'question5.3_grid_search_fts_selected.json'
+        json_post['model'] = model
 
         r = requests.post(
             f"{self.base_url}/predict", 
             json=json_post
         )    
 
-        return r.json()
+        return r
 
         
 

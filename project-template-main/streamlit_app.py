@@ -1,11 +1,11 @@
 import streamlit as st
 import pandas as pd
-import requests,json
-import datetime
+import datetime, os
 
 from ift6758.client.serving_game import ServingGame
 from ift6758.client.serving_client import ServingClient
 from ift6758.models.utils import preprocess
+
 list_features = ['empty_net', 'periodTime','period', 'x_coord', 'y_coord','distance','angle','shot_type',\
         'last_event_type', 'last_x_coord', 'last_y_coord','distance_from_last', 'seconds_since_last', \
             'rebound', 'angle_change','speed']
@@ -28,44 +28,34 @@ error_message = "error"
 game = None
 r= None
 SG = ServingGame('streamingGames')
-SC = ServingClient(features=list_features, keep_fts=keep_fts)
+IP = os.environ.get("SERVING_IP", "127.0.0.1")
+PORT = os.environ.get("SERVING_PORT", "8088")
+
 
 
 with st.sidebar:
+
+    ip = st.text_input('IP',value=IP)
+    port = st.text_input('Port',value=PORT)
+    SC = ServingClient(ip= ip,port = port,features=list_features, keep_fts=keep_fts)
+
+    pick_workspace = st.sidebar.selectbox( "Workspace?",('princesslove',))
+
+    pick_model = st.sidebar.selectbox('Model',('XGboost with features selection','XGboost without features selection'))
+
+    pick_version = st.sidebar.selectbox('Version',('1.0.0',))
+
     
-    pick_workspace = st.sidebar.selectbox(
-        "Workspace?",
-        ('princesslove',)
-    )
-
-    pick_model = st.sidebar.selectbox(
-        'Model',
-        ('XGboost with features selection',
-        'XGboost without features selection'
-        ),
-        index=0
-    )
-
-    pick_version = st.sidebar.selectbox(
-        'Version',
-        ('1.0.0',
-        )
-    )
-
-    download = st.button('Get Model')
 
     if pick_model == 'XGboost without features selection' : 
-            model = 'question5-2-with-grid-search-json-model'
-            src_exp = 'question5.2_with_grid_search.json.json' 
+        model = 'question5-2-with-grid-search-json-model'
+        src_exp = 'question5.2_with_grid_search.json.json' 
     elif pick_model == 'XGboost with features selection':
         model = 'question5-3-grid-search-fts-selected-model'
         src_exp = 'question5.3_grid_search_fts_selected.json' 
-    else:
-        error = True
-        error_message = "the model does not exist"
 
-    if download:
-        print(src_exp)
+    download = st.button('Get Model')
+    if download and not error:
         with st.spinner('Wait for it...'):
             SC.download_registry_model(workspace=pick_workspace, model=model, version=pick_version, source_experiment=src_exp)
             st.success('Done!')
@@ -77,24 +67,25 @@ with st.container():
     # TODO: Add Game ID input
    
     game_id = st.number_input('Game ID',value=2021020329)
-
-
+    
     try :
-        game,isLive = SG.getGame(game_id)
-        team_home = game["team_home_name"].iloc[0]
-        team_away = game["team_away_name"].iloc[0]
-        if isLive:
-            livePeriod = game['period'].max()
-            timeFormat = "%M:%S"
-            PERIOD_END = datetime.datetime.strptime("20:00", timeFormat)
-            liveTimeLeft = PERIOD_END - datetime.datetime.strptime(game[game['period']==livePeriod]['periodTime'].max(),timeFormat)
+        (game, isLive) ,status= SG.getGame(game_id)
+        if status == False:
+            error = True
+            error_message = 'This is not a valid game ID.'
+        else:
+            team_home = game["team_home_name"].iloc[0]
+            team_away = game["team_away_name"].iloc[0]
+            if isLive:
+                livePeriod = game['period'].max()
+                timeFormat = "%M:%S"
+                PERIOD_END = datetime.datetime.strptime("20:00", timeFormat)
+                liveTimeLeft = PERIOD_END - datetime.datetime.strptime(game[game['period']==livePeriod]['periodTime'].max(),timeFormat)
     except Exception as e :
         error = True
-        error_message = "the game was not found"
+        error_message = "The game was not found."
     
-    goals = [0,0]
-    predict_goals = [0,0]
-    proba_goals = [0.0,0.0]
+   
     if not error :
         try :
             X,Y,df_preprocessed,df_proc_flag = preprocess(game,features = list_features, standarize=True,keep_fts = keep_fts)
@@ -103,22 +94,20 @@ with st.container():
             error_message = "the game has not the necessary information for prediction"
     if not error :
         try :
-            json_post = json.loads(pd.DataFrame(X).to_json(orient="split"))
-            json_post['model'] = src_exp
+            r = SC.predict(X,src_exp)
             
-            r = requests.post(
-                "http://127.0.0.1:8088/predict", 
-                json=json_post
-            )
         except Exception as e :
             error = True
             error_message = e
-    
-    if "Model don't exists!" in r.json():
-        error = True
-        error_message="You didn't download this model. Click on Get Model..."
+   
     
     if not error :
+        goals = [0,0]
+        predict_goals = [0,0]
+        proba_goals = [0.0,0.0]
+        if "Model don't exists!" in r.json():
+            error = True
+            error_message="You didn't download this model. Click on Get Model..."
         try :
             for (index, row ) in game.iterrows():
                 if row['result_event']=='Goal':

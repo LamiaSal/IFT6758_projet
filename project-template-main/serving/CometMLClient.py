@@ -1,5 +1,4 @@
 import os
-
 from ift6758.models.utils import download_model
 
 

@@ -145,8 +145,7 @@ def download_model(register_name, workspace = "princesslove",version = "1.0.0",o
     load_dotenv()
     api = API()
     # Download a Registry Model:
-    api.download_registry_model(workspace, f"{register_name}", version,
-                                output_path=output_path, expand=True)
+    api.download_registry_model(workspace, f"{register_name}", version, output_path=output_path, expand=True)
 
 def predict_model(model,X_val):
     # predict on validation set

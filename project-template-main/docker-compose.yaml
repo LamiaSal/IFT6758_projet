@@ -21,6 +21,7 @@ services:
     image: ift6758/streamlit:1.0.0
     ports:
       - "8892:8892"
+#    network_mode: host
     environment:
      SERVING_IP: "serving"
      SERVING_PORT: 8088

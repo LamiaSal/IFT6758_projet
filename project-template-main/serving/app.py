@@ -8,8 +8,6 @@ gunicorn can be installed via:
 import os
 import logging
 from flask import Flask, jsonify, request
-
-
 from CometMLClient import download_model_with_exception
 from ift6758.models.utils import predict_model
 from xgboost import XGBClassifier
@@ -94,7 +92,7 @@ def predict():
     """
     # Get POST json data
     json_data = request.get_json()    
-   
+    app.logger.info(json_data) 
     # package_path = os.path.abspath(os.path.dirname(os.path.join(ift6758.__path__[0]))) 
 
     model = json_data['model']

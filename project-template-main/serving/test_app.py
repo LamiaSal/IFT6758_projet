@@ -1,14 +1,9 @@
-
-import sys
-import os
-import ift6758
-from ift6758.models.utils import download_model,preprocess
-from CometMLClient import download_model_with_exception
+from ift6758.models.utils import preprocess
 import pandas as pd
 import json
 import requests
-from ift6758.models.utils import preprocess, predict_model,download_model, compute_metrics
-from xgboost import XGBClassifier
+
+
 
 def get_input_features_df():
     
@@ -31,7 +26,7 @@ def get_input_features_df():
     'last_event_type_Takeaway']
 
     # preprocess
-    X, Y ,df_preprocessed,_ =  preprocess(df_data,features = list_features, standarize=True,keep_fts = keep_fts)
+    X, Y ,_,_ =  preprocess(df_data,features = list_features, standarize=True,keep_fts = keep_fts)
 
     return X, Y
 
@@ -42,28 +37,29 @@ if __name__ == "__main__":
     )   
 
     print(r.json())
-    # X, Y = get_input_features_df()
-    # json_post = json.loads(pd.DataFrame(X).to_json(orient="split"))
-    # json_post['model'] = 'question5.3_grid_search_fts_selected.json'
+    print('Predict')
+    X, Y = get_input_features_df()
+    json_post = json.loads(pd.DataFrame(X).to_json(orient="split"))
+    json_post['model'] = 'question5.3_grid_search_fts_selected.json'
 
-    # r = requests.post(
-    #     "http://127.0.0.1:8088/predict", 
-    #     json=json_post
-    # )    
-
-    # print(r.json())
-    # print(f'Accuracy {(Y==r.json()).mean()*100:.4}%')
-
-    json_data = {
-        'workspace': 'princesslove',
-        'model': 'question5-2-with-grid-search-json-model' ,
-        'version' : '1.0.0',
-        'source_experiment' : 'question5.2-with-grid-search-json-model.json',
-    }
     r = requests.post(
-        "http://127.0.0.1:8088/download_registry_model", 
-        json=json_data
-    )  
+        "http://127.0.0.1:8088/predict", 
+        json=json_post
+    )    
 
-    print(r.json()) 
+    print(r.json())
+    print(f'Accuracy {(Y==r.json()).mean()*100:.4}%')
+
+    # json_data = {
+    #     'workspace': 'princesslove',
+    #     'model': 'question5-2-with-grid-search-json-model' ,
+    #     'version' : '1.0.0',
+    #     'source_experiment' : 'question5.2-with-grid-search-json-model.json.json',
+    # }
+    # r = requests.post(
+    #     "http://127.0.0.1:8088/download_registry_model", 
+    #     json=json_data
+    # )  
+
+    # print(r.json()) 
     
