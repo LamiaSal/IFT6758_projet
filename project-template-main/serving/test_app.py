@@ -36,29 +36,34 @@ def get_input_features_df():
     return X, Y
 
 if __name__ == "__main__":
-   
-    X, Y = get_input_features_df()
-    json_post = json.loads(pd.DataFrame(X).to_json(orient="split"))
-    json_post['model'] = 'question5.3_grid_search_fts_selected.json'
 
-    r = requests.post(
-        "http://127.0.0.1:8088/predict", 
-        json=json_post
-    )    
+    r = requests.get(
+        "http://127.0.0.1:8088/logs"
+    )   
 
     print(r.json())
-    print(f'Accuracy {(Y==r.json()).mean()*100:.4}%')
+    # X, Y = get_input_features_df()
+    # json_post = json.loads(pd.DataFrame(X).to_json(orient="split"))
+    # json_post['model'] = 'question5.3_grid_search_fts_selected.json'
 
-    # json_data = {
-    #     'workspace': 'princesslove',
-    #     'model': 'question5-2-with-grid-search-json-model' ,
-    #     'version' : '1.0.0',
-    #     'source_experiment' : 'question5.2-with-grid-search-json-model.json',
-    # }
     # r = requests.post(
-    #     "http://127.0.0.1:8088/download_registry_model", 
-    #     json=json_data
-    # )  
+    #     "http://127.0.0.1:8088/predict", 
+    #     json=json_post
+    # )    
 
-    # print(r.json()) 
+    # print(r.json())
+    # print(f'Accuracy {(Y==r.json()).mean()*100:.4}%')
+
+    json_data = {
+        'workspace': 'princesslove',
+        'model': 'question5-2-with-grid-search-json-model' ,
+        'version' : '1.0.0',
+        'source_experiment' : 'question5.2-with-grid-search-json-model.json',
+    }
+    r = requests.post(
+        "http://127.0.0.1:8088/download_registry_model", 
+        json=json_data
+    )  
+
+    print(r.json()) 
     

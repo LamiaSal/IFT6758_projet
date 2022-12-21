@@ -1,15 +1,15 @@
-import sys
 import os
-import ift6758
-from ift6758.models.utils import download_model,preprocess
-import pandas as pd
+
+from ift6758.models.utils import download_model
+
 
 def download_model_with_exception(json):
     # input
     register_name = json['model'] #'question5-3-grid-search-fts-selected-model' 
-    package_path = os.path.abspath(os.path.dirname(os.path.join(ift6758.__path__[0])))
+    # package_path = os.path.abspath(os.path.dirname(os.path.join(ift6758.__path__[0])))
 
-    models_dir  = os.path.join(package_path,'comet_models')
+    # models_dir  = os.path.join(package_path,'comet_models')
+    models_dir = 'comet_models'
     if not os.path.exists(models_dir) :
         print("do not exist")
         os.mkdir(models_dir)

@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-import numpy as np
 import requests,json
 import datetime
 
@@ -21,6 +20,7 @@ keep_fts = ['empty_net','periodTime','period','x_coord','y_coord','distance','an
     'last_event_type_Giveaway','last_event_type_Goal','last_event_type_Hit',\
     'last_event_type_Missed Shot','last_event_type_Penalty',\
     'last_event_type_Takeaway']
+
 st.title("NHL goal predictor")
 
 error =False
@@ -32,7 +32,7 @@ SC = ServingClient(features=list_features, keep_fts=keep_fts)
 
 
 with st.sidebar:
-    # TODO: Add input for the sidebar
+    
     pick_workspace = st.sidebar.selectbox(
         "Workspace?",
         ('princesslove',)
@@ -40,22 +40,11 @@ with st.sidebar:
 
     pick_model = st.sidebar.selectbox(
         'Model',
-        ('XGboost without features selection',
-        'XGboost with features selection'
+        ('XGboost with features selection',
+        'XGboost without features selection'
         ),
-        index=1
+        index=0
     )
-
-     # TODO: src experiment to be removed
-    if pick_model == 'XGboost without features selection' : 
-        model = 'question5-2-with-grid-search-json-model'
-        src_exp = 'question5.2_with_grid_search.json' 
-    elif pick_model == 'XGboost with features selection':
-        model = 'question5-3-grid-search-fts-selected-model'
-        src_exp = 'question5.3_grid_search_fts_selected.json' 
-    else:
-        error = True
-        error_message = "the model does not exist"
 
     pick_version = st.sidebar.selectbox(
         'Version',
@@ -65,14 +54,28 @@ with st.sidebar:
 
     download = st.button('Get Model')
 
-    if download :
-        SC.download_registry_model(workspace=pick_workspace, model=model, version=pick_version, source_experiment=src_exp)
+    if pick_model == 'XGboost without features selection' : 
+            model = 'question5-2-with-grid-search-json-model'
+            src_exp = 'question5.2_with_grid_search.json.json' 
+    elif pick_model == 'XGboost with features selection':
+        model = 'question5-3-grid-search-fts-selected-model'
+        src_exp = 'question5.3_grid_search_fts_selected.json' 
+    else:
+        error = True
+        error_message = "the model does not exist"
 
+    if download:
+        print(src_exp)
+        with st.spinner('Wait for it...'):
+            SC.download_registry_model(workspace=pick_workspace, model=model, version=pick_version, source_experiment=src_exp)
+            st.success('Done!')
+        
+        
 
 
 with st.container():
     # TODO: Add Game ID input
-    
+   
     game_id = st.number_input('Game ID',value=2021020329)
 
 
@@ -102,6 +105,7 @@ with st.container():
         try :
             json_post = json.loads(pd.DataFrame(X).to_json(orient="split"))
             json_post['model'] = src_exp
+            
             r = requests.post(
                 "http://127.0.0.1:8088/predict", 
                 json=json_post
@@ -109,6 +113,11 @@ with st.container():
         except Exception as e :
             error = True
             error_message = e
+    
+    if "Model don't exists!" in r.json():
+        error = True
+        error_message="You didn't download this model. Click on Get Model..."
+    
     if not error :
         try :
             for (index, row ) in game.iterrows():
@@ -133,11 +142,11 @@ with st.container():
         except Exception as e :
             error = True
             error_message = "error in the computation of predicted and true number of goals per team"
-    
+        
 
 
 with st.container():
-    
+   
     # TODO: Add Game info and predictions
     if not error :
         if st.button('Ping Game'):
@@ -148,7 +157,7 @@ with st.container():
             st.subheader(f'{team_home} vs {team_away}')
             if isLive:
                 st.text(f'Live Game')
-               
+            
                 st.text(f'Period {livePeriod}- Time left {liveTimeLeft.strftime(timeFormat)}')
             
             c1, c2 = st.columns(2)

@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 
 class ServingClient:
-    def __init__(self, ip: str = "127.0.0.1", port: int = 8088, features=None,keep_fts=None):
+    def __init__(self, ip: str = "0.0.0.0", port: int = 8088, features=None,keep_fts=None):
         self.base_url = f"http://{ip}:{port}"
         logger.info(f"Initializing client; base URL: {self.base_url}")
 
@@ -37,7 +37,7 @@ class ServingClient:
         json_post['model'] = 'question5.3_grid_search_fts_selected.json'
 
         r = requests.post(
-            "http://127.0.0.1:8088/predict", 
+            f"{self.base_url}/predict", 
             json=json_post
         )    
 
@@ -73,7 +73,7 @@ class ServingClient:
             'source_experiment' : source_experiment
         }
         r = requests.post(
-            "http://127.0.0.1:8088/download_registry_model", 
+            f"{self.base_url}/download_registry_model", 
             json=json_data
         )  
 

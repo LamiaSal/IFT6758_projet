@@ -6,17 +6,15 @@ gunicorn can be installed via:
     $ pip install gunicorn
 """
 import os
-from pathlib import Path
 import logging
-from flask import Flask, jsonify, request, abort
-import sklearn
-import pandas as pd
-import joblib
+from flask import Flask, jsonify, request
+
+
 from CometMLClient import download_model_with_exception
-from ift6758.models.utils import preprocess, predict_model,download_model, compute_metrics
+from ift6758.models.utils import predict_model
 from xgboost import XGBClassifier
 
-import ift6758
+
 
 
 LOG_FILE = os.environ.get("FLASK_LOG", "flask.log")
@@ -76,6 +74,7 @@ def download_registry_model():
     
     """
     # Get POST json data
+    app.logger.info('dir: '+os.getcwd())
     json_data = request.get_json()
     app.logger.info(json_data)
 
@@ -96,13 +95,17 @@ def predict():
     # Get POST json data
     json_data = request.get_json()    
    
-    package_path = os.path.abspath(os.path.dirname(os.path.join(ift6758.__path__[0]))) 
+    # package_path = os.path.abspath(os.path.dirname(os.path.join(ift6758.__path__[0]))) 
 
     model = json_data['model']
-    models_dir  = os.path.join(package_path,'comet_models')
+    models_dir  = 'comet_models'
 
     model_xgb_without_RDS = XGBClassifier()
-
+    print(os.path.join(models_dir,model))
+    print(model)
+    
+    print('Current dir:',os.getcwd())  
+    print(os.path.exists(os.path.join(models_dir,model)))
     if os.path.exists(os.path.join(models_dir,model)):
         try :
             model_xgb_without_RDS.load_model(os.path.join(models_dir,model))
@@ -114,7 +117,7 @@ def predict():
         except Exception as e :
             response = e
     else:
-       message = "Model don't exists!" 
+       message = f"Model don't exists!{os.path.join(models_dir,model)}" 
        app.logger.info(message) 
        response = message
     

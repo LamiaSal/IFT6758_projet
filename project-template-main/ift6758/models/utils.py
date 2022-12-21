@@ -1,7 +1,6 @@
 from datetime import datetime as dt
 from datetime import timedelta 
 import pandas as pd
-import numpy as np
 from sklearn.preprocessing import StandardScaler
 from dotenv import load_dotenv
 from comet_ml import Experiment
