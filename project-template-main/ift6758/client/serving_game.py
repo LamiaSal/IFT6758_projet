@@ -34,17 +34,36 @@ class ServingGame():
 
     def getGame(self,gameID:int)->pd.DataFrame:
         path = os.path.join(self.outDir, str(gameID) + '.json')
+        if os.path.exists(path):
+            abstractState = self.getGameAbstractState(path)
+            if abstractState=='Live' or abstractState== 'Preview' or abstractState is None:
+                if not download_game(gameID,path):
+                    return (False, False), False
+
         if not os.path.exists(path):
             if not download_game(gameID,path):
                 return (False, False), False
+        
         return get_game_events(path, 'regular_season'), True
+
+
+    def getGameAbstractState(self,path):
+        with open(path,'r') as f:
+            data = json.loads(f.read())
+        
+        if 'messageNumber' in data and data['messageNumber'] == 2:
+            return None
+
+        return data['gameData']['status']['abstractGameState']
+    
+
 
         
 
 
 if __name__ =='__main__':
     sg = ServingGame('streamingGames')
-    df ,isLive, state= sg.getGame(2022020501)
+    (df ,isLive), state= sg.getGame(2022020525)
     print("Is Live:",isLive)
     print(df.head())
 

@@ -19,7 +19,7 @@ LAST_EVENT_TYPES = ['last_event_type_Blocked Shot', 'last_event_type_Faceoff',
        'last_event_type_Penalty', 'last_event_type_Shot',
        'last_event_type_Takeaway']
 
-COlUMNS_ORDER = ['empty_net', 'periodTime', 'period', 'x_coord', 'y_coord',
+COlUMNS_ORDER = ['event_Idx','name_team_that_shot','empty_net', 'periodTime', 'period', 'x_coord', 'y_coord',
        'distance', 'angle', 'last_x_coord', 'last_y_coord',
        'distance_from_last', 'seconds_since_last', 'rebound',
        'angle_change', 'speed', 'powerplay','team_that_shot_nb','other_team_nb',
@@ -50,7 +50,7 @@ def preprocess(df, features,standarize=False, drop_fts = [], keep_fts = []):
     df_proc["strength"].fillna(0.0,inplace=True)
     
     # Select features
-    df_proc = df_proc[[*features,*['name_team_that_shot'], *['result_event']]]
+    df_proc = df_proc[[*features,*['name_team_that_shot'], *['result_event'],*['event_Idx']]]
     df_proc = df_proc.dropna()
     
     # define Y (the target)
@@ -84,25 +84,27 @@ def preprocess(df, features,standarize=False, drop_fts = [], keep_fts = []):
                 df_proc[event_type]=0
     
 
-    df_proc_flag = df_proc.copy()
+    # df_proc_flag = df_proc.copy()
     order_selected_fts = [ft for ft in COlUMNS_ORDER if ft in df_proc.columns]
     df_proc = df_proc[order_selected_fts]
-
+    
     # drop features specified by drop_fts
     if len(drop_fts) >= 1:
         df_proc = df_proc.drop(drop_fts, axis=1)
-    
+    print('94',len(df_proc))
     # select keep_fts features
     if len(keep_fts) >= 1:
+        df_proc_flag = df_proc[['event_Idx','name_team_that_shot']+keep_fts].copy()
         df_proc = df_proc[keep_fts]
-    
+    print('99',len(df_proc))    
+   
     # define X and standardize it
     X = df_proc
-    if standarize:
+    if standarize and len(df_proc)>0:
         scaler = StandardScaler()
         X = scaler.fit_transform(X)
     
-    return X, Y.values,df_proc.reset_index(drop=True),df_proc_flag
+    return X, Y.values,df_proc.reset_index(drop=True),df_proc_flag.reset_index(drop=True)
 
 def save_metrics_and_models_on_comet(model,y_val,y_val_pred,y_val_prob,model_names,model_dir,name_experiment, register_model = True, sklearn_model=False):
     load_dotenv()
