@@ -8,11 +8,11 @@ ARG COMET_API_KEY
 WORKDIR /code
 
 # TODO: add code, optionally a default model if you want 
-ADD ./comet_models/question5.3_grid_search_fts_selected.json ./comet_models/
+#  ADD ./comet_models/question5.3_grid_search_fts_selected.json ./comet_models/
 ADD ./ift6758/ ./ift6758/
 ADD ./serving .
 ADD ./setup.py ./setup.py
-ADD ./requirements.txt ./requirements.txt
+ADD ./serving/requirements-serving.txt ./requirements.txt
 
 # TODO: install libs
 RUN pip3 install -r requirements.txt

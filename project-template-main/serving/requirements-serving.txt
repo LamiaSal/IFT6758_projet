@@ -1,0 +1,12 @@
+comet-ml==3.31.17
+Flask==2.2.2 
+numpy 
+pandas 
+python-dotenv==0.21.0
+requests 
+requests-toolbelt==0.10.1
+scikit-learn 
+scipy==1.7.3
+xgboost==1.6.2
+matplotlib
+seaborn

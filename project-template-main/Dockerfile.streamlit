@@ -7,7 +7,7 @@ WORKDIR /code
 ADD ./ift6758/ ./ift6758/
 ADD ./serving .
 ADD ./setup.py ./setup.py
-ADD ./requirements.txt ./requirements.txt
+ADD ./requirements-streamlit.txt ./requirements.txt
 ADD ./streamlit_app.py ./streamlit_app.py
 
 # TODO: install libs

@@ -1,7 +1,6 @@
 import streamlit as st
 import pandas as pd
 import datetime, os
-import datetime
 
 from ift6758.client.serving_game import ServingGame
 from ift6758.client.serving_client import ServingClient
@@ -36,7 +35,7 @@ DEBUG = os.environ.get("DEBUG", False)
 
 timeFormat = "%M:%S"
 hasPredictions = False
-
+X = []
 class GameInfo():
     def __init__(self,game_id,isLive):
         self.game_id= game_id
@@ -94,24 +93,23 @@ with st.sidebar:
 with st.container():
     # TODO: Add Game ID input
    
-    game_id = st.number_input('Game ID',value=2022020525)
+    game_id = st.number_input('Game ID',value=2022020469)
     (game, isLive) ,status= SG.getGame(game_id)
     try :
-       
         if status == False:
             error = True
             error_message = 'This is not a valid game ID.'
         else:
             gameInfo = GameInfo(game_id,isLive)
             gameInfo.setInfo(game)
-        if isLive:
-            path  = f'predictions/{pick_model}/{game_id}.csv'
-            if os.path.exists(path):
-                hasPredictions = True
-                predictions = pd.read_csv(path)
-                
-                cond = game['event_Idx'].isin(predictions['event_Idx'])
-                game.drop(game[cond].index, inplace = True)
+        
+        path  = f'predictions/{pick_model}/{game_id}.csv'
+        if os.path.exists(path):
+            hasPredictions = True
+            predictions = pd.read_csv(path)
+            
+            cond = game['event_Idx'].isin(predictions['event_Idx'])
+            game.drop(game[cond].index, inplace = True)
            
     except Exception as e :
         error = True
@@ -125,7 +123,6 @@ with st.container():
         try :
             if not game.empty:
                 X,Y,df_preprocessed,df_proc_flag = preprocess(game, features = list_features, standarize=True, keep_fts = keep_fts)
-                print('X',X)
         except Exception as e :
 
             error = True
@@ -159,7 +156,7 @@ with st.container():
             cols = cols[-2:] + cols[:-2]
             new_df = new_df[cols]
         
-            if isLive and hasPredictions:
+            if  hasPredictions:
                 predictions = pd.concat([predictions, new_df],ignore_index = True)
             else:
                 predictions = new_df
@@ -175,6 +172,7 @@ with st.container():
                         predict_goals[0]+=1
                     else:
                         predict_goals[1]+=1
+                        
                 if row['Prediction proba']>0.5:
                     if row['name_team_that_shot'] == gameInfo.team_home:
                         proba_goals[0] += row['Prediction proba']
@@ -194,19 +192,19 @@ with st.container():
     if not error :
         if st.button('Ping Game'):
             st.subheader(f'Game {game_id}:')
-            team_away = game["team_away_name"].iloc[0]
-            if (gameInfo.team_home == "Montréal Canadiens") or (team_away == "Canadiens") :
+            
+            if (gameInfo.team_home == "Montréal Canadiens") or (gameInfo.team_away == "Canadiens") :
                 st.balloons()
-            st.subheader(f'{gameInfo.team_home} vs {team_away}')
+                st.text('Pour la question bonus des ballons apparaissent pour les Canadiens de Montréal.')
+            st.subheader(f'{gameInfo.team_home} vs {gameInfo.team_away}')
             if isLive:
                 st.text(f'Live Game')
-            
                 st.text(f'Period {gameInfo.livePeriod} - Time left {str(gameInfo.liveTimeLeft)[2:]}')
             
             c1, c2 = st.columns(2)
             c1.metric(label=f'{gameInfo.team_home} xG (actual)', value=f'{proba_goals[0]:.1f}({gameInfo.goals[0]})', delta=f'{proba_goals[0]-gameInfo.goals[0]:.1f}',
             delta_color="off")
-            c2.metric(label=f'{team_away} xG (actual)', value=f'{proba_goals[1]:.1f}({gameInfo.goals[1]})', delta=f'{proba_goals[1]-gameInfo.goals[1]:.1f}',
+            c2.metric(label=f'{gameInfo.team_away} xG (actual)', value=f'{proba_goals[1]:.1f}({gameInfo.goals[1]})', delta=f'{proba_goals[1]-gameInfo.goals[1]:.1f}',
             delta_color="off")
             
            
