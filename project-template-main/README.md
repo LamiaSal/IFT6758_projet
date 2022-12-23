@@ -1,6 +1,23 @@
 # IFT6758 Repo Project
 
 In the repository you'll find the work we've done through the whole project of the MILA course IFT6758. This project was divided in 3 parts.
+
+# Milestone 3
+In this ***third and last part***, we deployed an app to load models through a docker container. A Live game client has also been  implemented to retrieve shots events from live or previous NHL games and display predictions.   
+
+## Config 
+Create a .env file and add your Comet key:
+
+    COMET_API_KEY=''
+
+
+## Docker and Streamlit
+Start the app by running the following command from the terminal:
+
+    docker-compose up
+    
+    
+    
 # Milestone 2
 In this ***second part*** we had to create a Comet account, do features engineering, train models and evaluate our performance on a test set.
 
